@@ -4,12 +4,14 @@
  * (c)2012 Marc Dannemann
  */
 require LIBRARY_DIR . DS . 'template.class.php';
+require LIBRARY_DIR . DS . 'layout.class.php';
 // TODO: If we got helpers insert them here ;)
  
 abstract class Controller {
 
   private $_params = array();
   protected $_tpl;
+  protected $_layoutTpl = null;
   
   public function setParameters(array $params) {
     $this->_params = $params;
@@ -30,9 +32,15 @@ abstract class Controller {
     } else throw new ErrorException('<i>'.get_called_class().'::'.$action.'()</i> does not exist.');
   }
   
+  public function setLayout($layoutTpl) {
+    $this->_layoutTpl = new Layout($layoutTpl);
+  }
+  
   public function parseOutput() {
-    // echo '<i>parseOutput()</i><br />';
-    echo $this->_tpl->render();
+    if($this->_layoutTpl != null) {
+      $this->_layoutTpl->assign('content', $this->_tpl->render());
+      echo $this->_layoutTpl->render();
+    } else echo $this->_tpl->render();
   }
 
 }

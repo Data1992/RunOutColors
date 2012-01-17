@@ -21,14 +21,11 @@ class Template {
   }
   
   public function render() {
-    Debug::addMessage('[Template]: rendering ' . TEMPLATE_DIR . DS . $this->_file);
+    Debug::addMessage('['.get_called_class().']: rendering ' . TEMPLATE_DIR . DS . $this->_file);
     extract($this->_values);
     ob_start();
     require TEMPLATE_DIR . DS . $this->_file;
-    return ob_get_clean();
-    
-    // TODO: export $_values, load $_file parse values into file
-    // and give it back to calling controller! (output buffering)
+    return ob_get_clean()."\n";
   }
 
 }

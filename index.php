@@ -21,7 +21,7 @@ require LIBRARY_DIR . DS . 'request.class.php';
 set_exception_handler('handleException');
 // Load main configuration
 $config = Configuration::getInstance('default.php');
-Debug::addMessage('[Configuration]: Loaded file "'. CONFIG_DIR . DS . 'default.php"');
+Debug::addMessage('[Configuration]: Loaded file '. CONFIG_DIR . DS . 'default.php');
 // Connect to database
 $db = new Database($config['database']);
 Debug::addMessage('[Database]: Connection established ('.
@@ -48,6 +48,10 @@ if(file_exists($controllerFile) && is_readable($controllerFile)) {
     // Create controller and invoke action, everything else is done there
     $controller = new $controllerClass();
     $controller->setParameters($params);
+    if(isset($config['template']['layout'])) {
+      Debug::addMessage('[Layout]: Loaded layout '. TEMPLATE_DIR . DS . $config['template']['layout']);
+      $controller->setLayout($config['template']['layout']);
+    }
     Debug::addMessage('[Controller]: Invoking '.$controllerClass.'::'.$action.'()');
     $controller->invokeAction($action);
     $controller->parseOutput();

@@ -15,8 +15,8 @@ function handleException($exception) {
   <b>{$exceptionType}: </b><br />
   &nbsp;&nbsp;&nbsp;<i>Message: </i>{$exception->getMessage()}<br />
   &nbsp;&nbsp;&nbsp;(thrown in {$exception->getFile()}:{$exception->getLine()})<br /><br />
-  <pre style="margin: 0; padding: 0">
-    {$exception->getTraceAsString()}
+  <pre style="margin: 0; padding-left: 15px;">
+{$exception->getTraceAsString()}
   </pre>
   <i>Execution stopped.</i>
 </div>

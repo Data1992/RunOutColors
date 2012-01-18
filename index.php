@@ -17,6 +17,8 @@ require LIBRARY_DIR . DS . 'configuration.class.php';
 require LIBRARY_DIR . DS . 'database.class.php';
 require LIBRARY_DIR . DS . 'request.class.php';
 
+setlocale(LC_ALL, (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') ? 'german' : 'de_DE.UTF-8');
+
 // Exception handler is placed in functions.php!
 set_exception_handler('handleException');
 // Load main configuration
@@ -26,8 +28,7 @@ Debug::addMessage('[Configuration]: Loaded file '. CONFIG_DIR . DS . 'default.ph
 $db = new Database($config['database']);
 Debug::addMessage('[Database]: Connection established ('.
   $config['database']['user'].'@'.$config['database']['host'].'/'.
-  $config['database']['schema'].')');
-Debug::addMessage('[Database]: Using '.$db->getAttribute(PDO::ATTR_SERVER_VERSION));
+  $config['database']['schema'].') - Using '.$db->getAttribute(PDO::ATTR_SERVER_VERSION));
 // Parse request
 $controller = Request::getValue('controller', 'home');
 $action = Request::getValue('action', 'index');
@@ -48,13 +49,14 @@ if(file_exists($controllerFile) && is_readable($controllerFile)) {
     // Create controller and invoke action, everything else is done there
     $controller = new $controllerClass();
     $controller->setParameters($params);
+    $controller->setDbConnection($db);
     if(isset($config['template']['layout'])) {
       Debug::addMessage('[Layout]: Loaded layout '. TEMPLATE_DIR . DS . $config['template']['layout']);
       $controller->setLayout($config['template']['layout']);
     }
     Debug::addMessage('[Controller]: Invoking '.$controllerClass.'::'.$action.'()');
     $controller->invokeAction($action);
+    $controller->assignToLayout('debug', Debug::generateOutput());
     $controller->parseOutput();
-    echo Debug::generateOutput();
   } else throw new ErrorException('Controller file does not contain class <i>'.$controllerClass.'</i>.');
 } else throw new ErrorException('<i>'.$controller.'.class.php</i> does not exist.');

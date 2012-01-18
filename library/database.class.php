@@ -21,6 +21,7 @@ class Database extends PDO {
       case 'mysql':
         $dsn = 'mysql:dbname='.$options['schema'].';host='.$options['host'];
         parent::__construct($dsn, $options['user'], $options['password']);
+        parent::setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
         break;
       default:
         throw new ErrorException("Database type <i>{$options['type']}</i> is currently not supported.");

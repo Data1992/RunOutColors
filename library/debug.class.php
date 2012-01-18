@@ -14,7 +14,7 @@ class Debug {
   
   public static function generateOutput() {
     $output  = '<div id="debug">'."\n";
-    $output .= str_repeat('=', 46).' DEBUG '.str_repeat('=', 47)."<br />\n";
+    $output .= str_pad(' DEBUG ', 100, '=', STR_PAD_BOTH)."<br />\n";
     foreach(self::$_messages as $msg)
       $output .= $msg;
     $output .= str_repeat('=', 100)."<br />\n</div>\n";

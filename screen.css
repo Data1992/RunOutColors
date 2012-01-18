@@ -1,0 +1,25 @@
+* { margin: 0; padding: 0; }
+body {
+  background: #555;
+  color: #FFF;
+  font-family: Tahoma;
+  padding: 10px;
+}
+
+#content {
+  width: 1000px;
+  margin: 0 auto;
+  padding: 10px;
+  border: 1px solid #FF0;
+}
+
+#debug {
+  width: 700px;
+  margin: 0 auto;
+  margin-top: 20px;
+  padding: 5px;
+  font-size: 11px; 
+  font-family: Courier, fixed;
+  border: 1px solid #F00;
+  color: #F66;
+}

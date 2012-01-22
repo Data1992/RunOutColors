@@ -43,6 +43,7 @@ abstract class Controller {
   public function parseOutput() {
     if($this->_layoutTpl != null) {
       $this->_layoutTpl->assign('content', $this->_tpl->render());
+      $this->_layoutTpl->assign('debug', Debug::generateOutput());
       echo $this->_layoutTpl->render();
     } else echo $this->_tpl->render();
   }

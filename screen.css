@@ -1,10 +1,34 @@
-* { margin: 0; padding: 0 5px; }
-body { background: #555; color: #FFF; font-family: Tahoma; padding: 10px; }
+* { margin: 0; padding: 0; }
+body { color: #FFF; font-family: "Tahoma"; padding: 10px; background: url(images/bg.jpg) no-repeat fixed; }
 
-#root { width: 1000px; margin: 0 auto; }
-#banner { width: 100%; height: 100px; background: #F00; }
-#menu { width: 100%; height: 50px; background: #0F0; }
-#content { width: 100%; min-height: 1000px; background: #00F; }
+#root { width: 850px; margin: 0 auto; }
+#banner { width: 100%; height: 100px; background: #000 url(images/banner.png) no-repeat; }
+#content { width: 100%; min-height: 900px; background: #00F; }
 #footer { width: 100%; padding: 0; }
 #copyright { width: 100%; height: 20px; background: #0FF; }
-#debug { width: 100%; margin: 0 auto; font-size: 11px; font-family: Courier; color: #F00; background: #000; }
+#debug { width: 100%; margin: 0 auto; font-size: 11px; font-family: Courier; color: #FFF; background: #000; }
+
+/* 
+ * CSS3 and HTML5 Dropdown Menu
+ * http://tympanus.net/codrops/2010/07/16/slide-down-box-menu/
+ */
+#menu { width: 100%; height: 85px; }
+#menu ul { margin: 0; padding: 0; list-style: none; font-family: "Myriad Pro", sans-serif; font-size: 14px; width: 100%; }
+#menu ul a { text-decoration: none; outline: none; }
+#menu ul li { float: left; width: 170px; height: 85px; position: relative; cursor: pointer; }
+#menu ul li > a { position: absolute; top: 0; left: 0; width: 170px; height: 85px; z-index: 12;
+  background: url(images/overlay.png) no-repeat bottom right; box-shadow: 0px 0px 2px #000; }
+#menu ul li a img { border: none; position: absolute; width: 0px; height: 0px; bottom: 0; left: 85px;
+  z-index: 100; box-shadow: 0px 0px 4px #000; }
+#menu ul li span.wrap { position: absolute; top: 25px; left: 0; width: 170px; height: 60px; z-index: 15; }
+#menu ul li span.active { position: absolute; background: #111; top: 85px; width: 170px; height: 0px;
+  left: 0; z-index: 15; box-shadow: 0px 0px 4px #000 inset; opacity: 0.95; }
+#menu ul li span span.link, #menu ul li span span.descr, #menu ul li div.box a { margin-left: 15px;
+  text-transform: uppercase; text-shadow: 1px 1px 1px #000; }
+#menu ul li span span.link { color: #FFF; font-size: 24px; float: left; clear: both; }
+#menu ul li span span.descr { color: #0B75AF; float: left; clear: both; width: 155px; font-size: 10px; letter-spacing: 1px; }
+#menu ul li div.box { display: block; position: absolute; width: 170px; overflow: hidden; height: 170px;
+  top: 85px; left: 0; display: none; background: #000; opacity: 0.6; }
+#menu ul li div.box a { float: left; clear: both; line-height: 30px; color: #0B75AF; }
+#menu ul li div.box a:first-child { margin-top: 15px; }
+#menu ul li div.box a:hover { color: #FFF; }

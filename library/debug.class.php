@@ -14,10 +14,10 @@ class Debug {
   
   public static function generateOutput() {
     $output  = '<div id="debug">'."\n";
-    $output .= str_pad('== DEBUG: ', 140, '=', STR_PAD_RIGHT)."<br />\n";
+    $output .= str_pad('== DEBUG: ', 120, '=', STR_PAD_RIGHT)."<br />\n";
     foreach(self::$_messages as $msg)
       $output .= $msg;
-    $output .= str_repeat('=', 140)."<br />\n</div>\n";
+    $output .= str_repeat('=', 120)."<br />\n</div>\n";
     return $output;
   }
 

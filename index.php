@@ -56,7 +56,6 @@ if(file_exists($controllerFile) && is_readable($controllerFile)) {
     }
     Debug::addMessage('[Controller]: Invoking '.$controllerClass.'::'.$action.'()');
     $controller->invokeAction($action);
-    $controller->assignToLayout('debug', Debug::generateOutput());
     $controller->parseOutput();
   } else throw new ErrorException('Controller file does not contain class <i>'.$controllerClass.'</i>.');
 } else throw new ErrorException('<i>'.$controller.'.class.php</i> does not exist.');

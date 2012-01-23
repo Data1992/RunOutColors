@@ -73,7 +73,9 @@
       </ul>
     </div>
     <div id="content">
+      <div id="content-inner">
 <?php echo $content; ?>
+      </div>
     </div>
     <div id="footer">
       <div id="copyright"></div>

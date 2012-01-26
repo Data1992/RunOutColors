@@ -22,10 +22,14 @@ class Template {
   
   public function render() {
     Debug::addMessage('['.get_called_class().']: rendering ' . TEMPLATE_DIR . DS . $this->_file);
-    extract($this->_values);
-    ob_start();
-    require TEMPLATE_DIR . DS . $this->_file;
-    return ob_get_clean()."\n";
+    $fullTplPath = TEMPLATE_DIR . DS . $this->_file;
+    if(file_exists($fullTplPath) && is_readable($fullTplPath)) {
+      if(is_array($this->_values))
+        extract($this->_values);
+      ob_start();
+      require TEMPLATE_DIR . DS . $this->_file;
+      return ob_get_clean()."\n";
+    } else throw new ErrorException('<i>'.$fullTplPath.'</i> does not exist in template directory.');
   }
 
 }

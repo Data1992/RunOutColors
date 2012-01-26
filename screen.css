@@ -1,13 +1,27 @@
 * { margin: 0; padding: 0; }
-body { color: #FFF; font-family: "Tahoma"; padding: 10px; background: url(images/bg.jpg) no-repeat fixed; }
+body { color: #FFF; font-family: "Myriad Pro", sans-serif; padding: 10px; background: url(images/bg.jpg) no-repeat fixed; }
 
-#root { width: 850px; margin: 0 auto; }
+#root { width: 850px; margin: 0 auto; position: relative; right: 100px; }
 #banner { width: 100%; height: 100px; background: #000 url(images/banner.png) no-repeat; }
-#content { width: 100%; min-height: 1500px; background-color: rgba(50,50,50,0.6); }
+#content { width: 100%; min-height: 1000px; background-color: rgba(50,50,50,0.6); }
 #content-inner { width: 100%; padding: 10px; }
-#footer { width: 100%; padding: 0; }
-#copyright { width: 100%; height: 20px; background: #000; }
+#footer { width: 100%; padding: 0; background: #000; }
+#copyright { width: 200px; height: 20px; font-size: 11px; margin: 0 auto; padding-top: 5px; text-align: center; }
 #debug { width: 100%; margin: 0 auto; font-size: 11px; font-family: Courier; color: #FFF; background: #000; }
+#advertising { position: absolute; top: 10px;  right: 10px; }
+#twitterfeed { position: absolute; top: 270px; right: 10px; }
+
+#advertising, #twitterfeed { width: 200px; background: rgba(50,50,50,0.6); border: 1px solid #111; }
+#advertising ul > span, #twitterfeed ul > span { font-size: 10px; }
+#advertising li, #twitterfeed li { list-style: inside none; padding-left: 10px; }
+#advertising ul { margin: 0px 10px 10px 10px; }
+#twitterfeed li { font-size: 13px; padding-bottom: 10px; }
+
+#twitterfeed span { margin-left: 10px; }
+#twitterfeed .tweet { width: 90%; clear: both; padding-bottom: 10px; }
+#twitterfeed .tweet img { width: 39px; height: 38px; float:left; padding: 5px 5px 5px 0px; }
+#twitterfeed .tweet a { text-decoration: none; color: #FFF; font-size: 12px; }
+#twitterfeed .tweet a:hover { text-decoration: underline; }
 
 /* 
  * CSS3 and HTML5 Dropdown Menu
@@ -29,7 +43,7 @@ body { color: #FFF; font-family: "Tahoma"; padding: 10px; background: url(images
 #menu ul li span span.link { color: #FFF; font-size: 24px; float: left; clear: both; }
 #menu ul li span span.descr { color: #0B75AF; float: left; clear: both; width: 155px; font-size: 10px; letter-spacing: 1px; }
 #menu ul li div.box { display: block; position: absolute; width: 170px; overflow: hidden; height: 170px;
-  top: 85px; left: 0; display: none; background: #000; opacity: 0.6; }
+  top: 85px; left: 0; display: none; background: #000; opacity: 0.8; }
 #menu ul li div.box a { float: left; clear: both; line-height: 30px; color: #0B75AF; }
 #menu ul li div.box a:first-child { margin-top: 15px; }
 #menu ul li div.box a:hover { color: #FFF; }

@@ -3,6 +3,9 @@
  * Run Out Colors Project Page
  * (c)2012 Marc Dannemann
  */
+require LIBRARY_DIR . DS . 'tmhTwitter' . DS . 'tmhOAuth.php';
+require LIBRARY_DIR . DS . 'tmhTwitter' . DS . 'tmhUtilities.php';
+ 
 function printDbg($message, $newline = true) {
   if(defined('DEBUG') && DEBUG === true)
     echo $message.($newline === true ? '<br />' : '')."\n";

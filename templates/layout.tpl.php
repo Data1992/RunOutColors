@@ -14,7 +14,7 @@
     <div id="menu">
       <ul>
         <li>
-          <a href="#">
+          <a href="/">
             <img src="images/menu/1.jpg" alt="" />
             <span class="active"></span>
             <span class="wrap">
@@ -22,21 +22,14 @@
               <span class="descr">Neuigkeiten</span>
             </span>
           </a>
-          <!--
-          <div class="box">
-            <a href="#">Website</a>
-            <a href="#">Illustrations</a>
-            <a href="#">Photography</a>
-          </div>
-          -->
         </li>
         <li>
-          <a href="#">
+          <a href="/?controller=blog">
             <img src="images/menu/2.jpg" alt="" />
             <span class="active"></span>
             <span class="wrap">
-              <span class="link">Link 2</span>
-              <span class="descr">Subtitle 2</span>
+              <span class="link">Blog</span>
+              <span class="descr">Tell The Story</span>
             </span>
           </a>
         </li>
@@ -65,10 +58,14 @@
             <img src="images/menu/5.jpg" alt="" />
             <span class="active"></span>
             <span class="wrap">
-              <span class="link">Link 5</span>
-              <span class="descr">Subtitle 5</span>
+              <span class="link">About</span>
+              <span class="descr"></span>
             </span>
           </a>
+          <div class="box">
+            <a href="#">Disclaimer</a>
+            <a href="#">Copyright</a>
+          </div>
         </li>
       </ul>
     </div>
@@ -78,9 +75,43 @@
       </div>
     </div>
     <div id="footer">
-      <div id="copyright"></div>
+      <div id="copyright">
+        &copy;<?php echo date('Y', time()); ?> RunOutColors
+      </div>
 <?php echo $debug; ?>
     </div>
+  </div>
+  <div id="advertising">
+    <ul>
+      <span>GoogleAds</span>
+      <li>Werbung</li>
+      <li>Werbung</li>
+      <li>Werbung</li>
+      <li>Werbung</li>
+      <li>Werbung</li>
+    </ul>
+    <ul>
+      <span>BackLinkSeller</span>
+      <li>Werbung</li>
+      <li>Werbung</li>
+      <li>Werbung</li>
+      <li>Werbung</li>
+      <li>Werbung</li>
+    </ul>
+  </div>
+  <div id="twitterfeed">
+    <ul>
+      <span>Latests Tweets</span>
+<?php $tweets = Twitter::getLatestTweets(5); ?>
+<?php foreach($tweets as $tweet): ?>
+      <li class="tweet">
+        <img src="<?php echo $tweet['image_url']; ?>" />
+        <a href="http://www.twitter.com/<?php echo $tweet['user']; ?>/status/<?php echo $tweet['id']; ?>" target="_blank">
+          <?php echo $tweet['text']; ?>
+        </a>
+      </li>
+<?php endforeach; ?>
+    </ul>
   </div>
 </body>
 </html>

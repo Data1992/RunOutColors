@@ -9,6 +9,7 @@ define('CONFIG_DIR',     ROOT_DIR . DS . 'config');
 define('LIBRARY_DIR',    ROOT_DIR . DS . 'library');
 define('CONTROLLER_DIR', ROOT_DIR . DS . 'controller');
 define('TEMPLATE_DIR',   ROOT_DIR . DS . 'templates');
+define('MODEL_DIR',      ROOT_DIR . DS . 'models');
 define('DEBUG', false);
 
 require LIBRARY_DIR . DS . 'functions.php';
@@ -16,6 +17,7 @@ require LIBRARY_DIR . DS . 'debug.class.php';
 require LIBRARY_DIR . DS . 'configuration.class.php';
 require LIBRARY_DIR . DS . 'database.class.php';
 require LIBRARY_DIR . DS . 'request.class.php';
+require LIBRARY_DIR . DS . 'twitter.class.php';
 
 setlocale(LC_ALL, (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') ? 'german' : 'de_DE.UTF-8');
 
@@ -36,15 +38,18 @@ $params = Request::getAllValues(array('controller', 'action'));
 Debug::addMessage('[Request]: $controller='.$controller.', $action='.$action);
 Debug::addMessage('[Request]: Other parameters: '.(count($params) > 0 ? print_r($params, true): '<i>none</i>'));
 
+// Initialize twitter api
+Twitter::authenticate($config['twitter']);
+
 // Controller calling requirements:
 //    - there has to be a correctly named controller file in the controller directory
 //    - the controller file contains the controller class
 //    - the action method exists in the controller object
 //    - the action method is accessible in public context
-$controllerFile = CONTROLLER_DIR . DS . $controller . 'controller.class.php';
+$controllerFile = $controller . '_controller.class.php';
 $controllerClass = ucfirst($controller).'Controller';
-if(file_exists($controllerFile) && is_readable($controllerFile)) {
-  require_once $controllerFile;
+if(file_exists(CONTROLLER_DIR . DS . $controllerFile) && is_readable(CONTROLLER_DIR . DS . $controllerFile)) {
+  require_once CONTROLLER_DIR . DS . $controllerFile;
   if(class_exists($controllerClass)) {
     // Create controller and invoke action, everything else is done there
     $controller = new $controllerClass();
@@ -58,4 +63,4 @@ if(file_exists($controllerFile) && is_readable($controllerFile)) {
     $controller->invokeAction($action);
     $controller->parseOutput();
   } else throw new ErrorException('Controller file does not contain class <i>'.$controllerClass.'</i>.');
-} else throw new ErrorException('<i>'.$controller.'.class.php</i> does not exist.');
+} else throw new ErrorException('<i>'.$controllerFile.'</i> does not exist.');

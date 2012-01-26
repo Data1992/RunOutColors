@@ -19,24 +19,34 @@ class Twitter {
     else
       $twitter = self::$_authInstance;
     
-    $result = $twitter->request('GET', 'http://api.twitter.com/1/statuses/user_timeline.json', array(
-      'include_entities' => '0',
-      'screen_name' => 'Minifuzi',
-      'count' => $num,
-    ));
-    if($result == 200) {
-      $timeline = json_decode($twitter->response['response'], true);
-      $tweets = array();
-      foreach($timeline as $tweet) {
-        $tweets[] = array(
-          'id' => $tweet['id_str'],
-          'user' => $tweet['user']['screen_name'],
-          'image_url' => $tweet['user']['profile_image_url'],
-          'text' => $tweet['text'],
-        );
-      }
-      return $tweets;
-    } else throw new ErrorException('Twitter error occured: '.$twitter->response['error']);
+    try {
+      $result = $twitter->request('GET', 'http://api.twitter.com/1/statuses/user_timeline.json', array(
+        'include_entities' => '0',
+        'screen_name' => 'Minifuzi',
+        'count' => $num,
+      ));
+      if($result == 200) {
+        $timeline = json_decode($twitter->response['response'], true);
+        $tweets = array();
+        foreach($timeline as $tweet) {
+          $tweets[] = array(
+            'id' => $tweet['id_str'],
+            'user' => $tweet['user']['screen_name'],
+            'image_url' => $tweet['user']['profile_image_url'],
+            'text' => $tweet['text'],
+          );
+          
+          file_put_contents(TEMP_DIR . DS . 'tweet_cache', serialize($tweets));
+        }
+        return $tweets;
+      } else throw new ErrorException($twitter->response['error']);
+    } catch(ErrorException $e) {
+      if(file_exists(TEMP_DIR . DS . 'tweet_cache')) {
+        $file = file(TEMP_DIR . DS . 'tweet_cache');
+        $tweets = unserialize($file[0]);
+        return $tweets;
+      } else return 'twitter.com ist derzeit nicht erreichbar ('.$e->getMessage().').';
+    }
   }
 
 }

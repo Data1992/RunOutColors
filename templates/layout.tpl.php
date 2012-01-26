@@ -64,7 +64,7 @@
           </a>
           <div class="box">
             <a href="#">Disclaimer</a>
-            <a href="#">Copyright</a>
+            <a href="/?controller=static&action=imprint">Impressum</a>
           </div>
         </li>
       </ul>
@@ -103,14 +103,18 @@
     <ul>
       <span>Latests Tweets</span>
 <?php $tweets = Twitter::getLatestTweets(5); ?>
-<?php foreach($tweets as $tweet): ?>
+<?php if(is_array($tweets)): ?>
+<?php   foreach($tweets as $tweet): ?>
       <li class="tweet">
         <img src="<?php echo $tweet['image_url']; ?>" />
         <a href="http://www.twitter.com/<?php echo $tweet['user']; ?>/status/<?php echo $tweet['id']; ?>" target="_blank">
           <?php echo $tweet['text']; ?>
         </a>
       </li>
-<?php endforeach; ?>
+<?php   endforeach; ?>
+<?php else: ?>
+      <li><?php echo $tweets; ?></li>
+<?php endif; ?>
     </ul>
   </div>
 </body>

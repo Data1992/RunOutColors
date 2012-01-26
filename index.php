@@ -10,6 +10,7 @@ define('LIBRARY_DIR',    ROOT_DIR . DS . 'library');
 define('CONTROLLER_DIR', ROOT_DIR . DS . 'controller');
 define('TEMPLATE_DIR',   ROOT_DIR . DS . 'templates');
 define('MODEL_DIR',      ROOT_DIR . DS . 'models');
+define('TEMP_DIR',       ROOT_DIR . DS . 'temp');
 define('DEBUG', false);
 
 require LIBRARY_DIR . DS . 'functions.php';
@@ -32,8 +33,8 @@ Debug::addMessage('[Database]: Connection established ('.
   $config['database']['user'].'@'.$config['database']['host'].'/'.
   $config['database']['schema'].') - Using '.$db->getAttribute(PDO::ATTR_SERVER_VERSION));
 // Parse request
-$controller = Request::getValue('controller', 'home');
-$action = Request::getValue('action', 'index');
+$controller = Request::getValue('controller', 'static');
+$action = Request::getValue('action', 'home');
 $params = Request::getAllValues(array('controller', 'action'));
 Debug::addMessage('[Request]: $controller='.$controller.', $action='.$action);
 Debug::addMessage('[Request]: Other parameters: '.(count($params) > 0 ? print_r($params, true): '<i>none</i>'));
@@ -62,5 +63,5 @@ if(file_exists(CONTROLLER_DIR . DS . $controllerFile) && is_readable(CONTROLLER_
     Debug::addMessage('[Controller]: Invoking '.$controllerClass.'::'.$action.'()');
     $controller->invokeAction($action);
     $controller->parseOutput();
-  } else throw new ErrorException('Controller file does not contain class <i>'.$controllerClass.'</i>.');
-} else throw new ErrorException('<i>'.$controllerFile.'</i> does not exist.');
+  } else throw new ErrorException('Controller file does not contain class <i>'.$controllerClass.'</i>.', 0, E_USER_ERROR);
+} else throw new ErrorException('<i>'.$controllerFile.'</i> does not exist.', 0, E_USER_ERROR);

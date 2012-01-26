@@ -14,7 +14,7 @@ function printDbg($message, $newline = true) {
 function handleException($exception) {
   $exceptionType = get_class($exception);
   echo <<<EOF
-<div style="margin: 20px; padding: 5px; border: 3px solid red; background: #FAA">
+<div style="margin: 20px; padding: 5px; border: 3px solid red; background: #FAA; color: #000;">
   <b>{$exceptionType}: </b><br />
   &nbsp;&nbsp;&nbsp;<i>Message: </i>{$exception->getMessage()}<br />
   &nbsp;&nbsp;&nbsp;(thrown in {$exception->getFile()}:{$exception->getLine()})<br /><br />
@@ -24,5 +24,4 @@ function handleException($exception) {
   <i>Execution stopped.</i>
 </div>
 EOF;
-  die;
 }

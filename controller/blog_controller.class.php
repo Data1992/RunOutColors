@@ -7,6 +7,7 @@ require_once 'controller.class.php';
 class BlogController extends Controller {
 
   protected $_models = array('blog_post');
+  protected $_defaultAction = 'index';
 
   public function index() {
   }

@@ -23,10 +23,11 @@ class BlogPost {
   }
   
   public static function loadById($id) {
-    $stmt = $this->_db->prepare('SELECT id, caption, text, created, edited FROM blog_posts WHERE id = :id');
+    $stmt = $this->_db->prepare('SELECT id, caption, text, created, edited FROM blog_posts WHERE id = :id LIMIT 1');
     $stmt->execute(array(':id' => $id));
     
-    $rows = $stmt->fetchAll();
+    $row = $stmt->fetch();
+    return $row;
   }
   
 }

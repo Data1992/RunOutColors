@@ -15,6 +15,7 @@ abstract class Controller {
   protected $_layoutTpl = null;
   
   protected $_models = null;
+  protected $_defaultAction = null;
   
   public function __construct() {
     if(is_array($this->_models)) {
@@ -43,7 +44,9 @@ abstract class Controller {
     $this->_layoutTpl->assign($name, $value);
   }
   
-  public function invokeAction($action) {
+  public function invokeAction($claimedAction) {
+    $action = (!method_exists($this, $claimedAction) && $this->_defaultAction != null) ? $this->_defaultAction : $claimedAction;
+    
     if(method_exists($this, $action)) {
       $reflection = new ReflectionMethod($this, $action);
       if($reflection->isPublic()) {
@@ -51,7 +54,7 @@ abstract class Controller {
         $this->_tpl = new Template($templateFile);
         $this->$action();
       } else throw new ErrorException('<i>'.get_called_class().'::'.$action.'()</i> could not be called (has to be public!).');
-    } else throw new ErrorException('<i>'.get_called_class().'::'.$action.'()</i> does not exist.');
+    } else throw new ErrorException('Neither <i>'.get_called_class().'::'.$claimedAction.'()</i> nor <i>$_defaultAction</i> does exist.');
   }
   
   public function parseOutput() {

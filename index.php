@@ -11,7 +11,7 @@ define('CONTROLLER_DIR', ROOT_DIR . DS . 'controller');
 define('TEMPLATE_DIR',   ROOT_DIR . DS . 'templates');
 define('MODEL_DIR',      ROOT_DIR . DS . 'models');
 define('TEMP_DIR',       ROOT_DIR . DS . 'temp');
-define('DEBUG', false);
+define('DEBUG', true);
 
 require LIBRARY_DIR . DS . 'functions.php';
 require LIBRARY_DIR . DS . 'debug.class.php';
@@ -20,8 +20,8 @@ require LIBRARY_DIR . DS . 'database.class.php';
 require LIBRARY_DIR . DS . 'request.class.php';
 require LIBRARY_DIR . DS . 'twitter.class.php';
 
+// Localize datetime output
 setlocale(LC_ALL, (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') ? 'german' : 'de_DE.UTF-8');
-
 // Exception handler is placed in functions.php!
 set_exception_handler('handleException');
 // Load main configuration
@@ -31,14 +31,13 @@ Debug::addMessage('[Configuration]: Loaded file '. CONFIG_DIR . DS . 'default.ph
 $db = new Database($config['database']);
 Debug::addMessage('[Database]: Connection established ('.
   $config['database']['user'].'@'.$config['database']['host'].'/'.
-  $config['database']['schema'].') - Using '.$db->getAttribute(PDO::ATTR_SERVER_VERSION));
+  $config['database']['database'].') - Using '.$db->getAttribute(PDO::ATTR_SERVER_VERSION));
 // Parse request
 $controller = Request::getValue('controller', 'static');
 $action = Request::getValue('action', 'home');
 $params = Request::getAllValues(array('controller', 'action'));
 Debug::addMessage('[Request]: $controller='.$controller.', $action='.$action);
 Debug::addMessage('[Request]: Other parameters: '.(count($params) > 0 ? print_r($params, true): '<i>none</i>'));
-
 // Initialize twitter api
 Twitter::authenticate($config['twitter']);
 

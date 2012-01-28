@@ -20,10 +20,10 @@ class Request {
     return $values;
   }
   
-  public static function getAllValues(array $excludes) {
+  public static function getAllValues(array $excludes = null) {
     $values = array();
     foreach($_REQUEST as $name => $value) {
-      if(!in_array($name, $excludes))
+      if($excludes == null || !in_array($name, $excludes))
         $values[$name] = $_REQUEST[$name];
     }
     

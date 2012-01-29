@@ -10,6 +10,7 @@ class BlogController extends Controller {
   protected $_defaultAction = 'index';
 
   public function index() {
+    $this->_tpl->assign('post', BlogPost::loadById(1));
   }
 
 }

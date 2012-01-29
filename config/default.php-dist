@@ -1,0 +1,23 @@
+<?php
+/**
+ * Run Out Colors Project Page
+ * (c)2012 Marc Dannemann
+ */
+return array(
+  'database' => array(
+    'type' => 'pgsql',
+    'host' => 'localhost',
+    'user' => '',
+    'password' => '',
+    'database' => '',
+  ),
+  'template' => array(
+    'layout' => 'layout.tpl.php',
+  ),
+  'twitter' => array(
+    'consumer_key'    => '',
+    'consumer_secret' => '',
+    'user_token'      => '',
+    'user_secret'     => '',
+  ),
+);

@@ -38,6 +38,13 @@ abstract class Controller {
   
   public function setDbConnection($db) {
     $this->_db = $db;
+    foreach($this->_models as $model) {
+      $modelClass = '';
+      $parts = explode('_', $model);
+      while(!empty($parts))
+        $modelClass .= ucfirst(array_shift($parts));
+      $modelClass::setDb($this->_db);
+    }
   }
   
   public function assignToLayout($name, $value = null) {

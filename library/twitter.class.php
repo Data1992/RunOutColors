@@ -23,6 +23,7 @@ class Twitter {
       $result = $twitter->request('GET', 'http://api.twitter.com/1/statuses/user_timeline.json', array(
         'include_entities' => '0',
         'screen_name' => 'Minifuzi',
+        'exclude_replies' => '1',
         'count' => $num,
       ));
       if($result == 200) {

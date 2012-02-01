@@ -18,6 +18,7 @@ require LIBRARY_DIR . DS . 'debug.class.php';
 require LIBRARY_DIR . DS . 'configuration.class.php';
 require LIBRARY_DIR . DS . 'database.class.php';
 require LIBRARY_DIR . DS . 'request.class.php';
+require LIBRARY_DIR . DS . 'routing.class.php';
 require LIBRARY_DIR . DS . 'twitter.class.php';
 
 // Localize datetime output
@@ -33,14 +34,21 @@ Debug::addMessage('[Database]: Connection established ('.
   $config['database']['user'].'@'.$config['database']['host'].'/'.
   $config['database']['database'].') - Using '.$db->getAttribute(PDO::ATTR_SERVER_VERSION));
 // Parse request
+/* old:
 $controller = Request::getValue('controller', 'static');
 $action = Request::getValue('action', 'home');
 $params = Request::getAllValues(array('controller', 'action'));
+*/
+$router = new Routing();
+$request = $router->processRequest();
+$controller = $request['controller'];
+$action = $request['action'];
+$params = (isset($request['parameters']) ? $request['parameters'] : array());
 Debug::addMessage('[Request]: $controller='.$controller.', $action='.$action);
 Debug::addMessage('[Request]: Other parameters: '.(count($params) > 0 ? print_r($params, true): '<i>none</i>'));
+
 // Initialize twitter api
 Twitter::authenticate($config['twitter']);
-
 // Controller calling requirements:
 //    - there has to be a correctly named controller file in the controller directory
 //    - the controller file contains the controller class

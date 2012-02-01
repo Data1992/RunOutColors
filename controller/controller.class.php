@@ -14,7 +14,7 @@ abstract class Controller {
   protected $_tpl;
   protected $_layoutTpl = null;
   
-  protected $_models = null;
+  protected $_models = array();
   protected $_defaultAction = null;
   
   public function __construct() {

@@ -25,7 +25,7 @@
           </a>
         </li>
         <li>
-          <a href="/?controller=blog">
+          <a href="/blog">
             <img src="images/menu/2.jpg" alt="" />
             <span class="active"></span>
             <span class="wrap">
@@ -65,7 +65,7 @@
           </a>
           <div class="box">
             <a href="#">Disclaimer</a>
-            <a href="/?controller=static&action=imprint">Impressum</a>
+            <a href="/imprint">Impressum</a>
           </div>
         </li>
       </ul>

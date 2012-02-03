@@ -18,4 +18,11 @@ return array(
       'action' => 'index',
     ),
   ),
+  'imprint' => array(
+    'route' => '/imprint',
+    'options' => array(
+      'controller' => 'static',
+      'action' => 'imprint',
+    ),
+  ),
 );

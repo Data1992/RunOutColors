@@ -15,7 +15,7 @@
     <div id="menu">
       <ul>
         <li>
-          <a href="/">
+          <a href="./">
             <img src="images/menu/1.jpg" alt="" />
             <span class="active"></span>
             <span class="wrap">
@@ -25,7 +25,7 @@
           </a>
         </li>
         <li>
-          <a href="/blog">
+          <a href="./blog">
             <img src="images/menu/2.jpg" alt="" />
             <span class="active"></span>
             <span class="wrap">
@@ -35,12 +35,12 @@
           </a>
         </li>
         <li>
-          <a href="#">
+          <a href="./gallery">
             <img src="images/menu/3.jpg" alt="" />
             <span class="active"></span>
             <span class="wrap">
-              <span class="link">Link 3</span>
-              <span class="descr">Subtitle 3</span>
+              <span class="link">Gallery</span>
+              <span class="descr"></span>
             </span>
           </a>
         </li>
@@ -65,7 +65,7 @@
           </a>
           <div class="box">
             <a href="#">Disclaimer</a>
-            <a href="/imprint">Impressum</a>
+            <a href="./imprint">Impressum</a>
           </div>
         </li>
       </ul>

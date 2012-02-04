@@ -18,6 +18,13 @@ return array(
       'action' => 'index',
     ),
   ),
+  'gallery-index' => array(
+    'route' => '/gallery',
+    'options' => array(
+      'controller' => 'gallery',
+      'action' => 'index',
+    ),
+  ),
   'imprint' => array(
     'route' => '/imprint',
     'options' => array(

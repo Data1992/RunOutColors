@@ -1,3 +1,14 @@
+@font-face {
+    font-family: 'OpificioRegular';
+      src: url('opificio/opificio-webfont.eot');
+      src: url('opificio/opificio-webfont.eot?#iefix') format('embedded-opentype'),
+           url('opificio/opificio-webfont.woff') format('woff'),
+           url('opificio/opificio-webfont.ttf') format('truetype'),
+           url('opificio/opificio-webfont.svg#OpificioRegular') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+
 * { margin: 0; padding: 0; }
 body { color: #FFF; font-family: "Tahoma", sans-serif; padding: 10px; background: url(images/bg.jpg) no-repeat fixed; }
 a { color: #FFF; }
@@ -29,7 +40,7 @@ a { color: #FFF; }
  * http://tympanus.net/codrops/2010/07/16/slide-down-box-menu/
  */
 #menu { width: 100%; height: 85px; }
-#menu ul { margin: 0; padding: 0; list-style: none; font-family: "Myriad Pro", sans-serif; font-size: 14px; width: 100%; }
+#menu ul { margin: 0; padding: 0; list-style: none; font-family: "OpificioRegular", "Myriad Pro", sans-serif; font-size: 14px; width: 100%; }
 #menu ul a { text-decoration: none; outline: none; }
 #menu ul li { float: left; width: 170px; height: 85px; position: relative; cursor: pointer; }
 #menu ul li > a { position: absolute; top: 0; left: 0; width: 170px; height: 85px; z-index: 12;
@@ -48,3 +59,8 @@ a { color: #FFF; }
 #menu ul li div.box a { float: left; clear: both; line-height: 30px; color: #0B75AF; }
 #menu ul li div.box a:first-child { margin-top: 15px; }
 #menu ul li div.box a:hover { color: #FFF; }
+
+.gallery-category { margin: 5px; border: 1px solid #FFF; height: 64px; }
+.gallery-category img { width: 60px; height: 60px; border: 1px solid #FFF; background-color: #FFF; padding: 2px; float: left; }
+.gallery-category div.title { margin: 2px 7px; width: 150px; font-size: 16px; font-weight: bold; float: left; height: 60px; }
+.gallery-category div.descr { margin: 2px; }

@@ -1,2 +1,3 @@
 temp/*_cache
 config/default.php
+images/gallery/**/*

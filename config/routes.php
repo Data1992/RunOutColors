@@ -31,7 +31,7 @@ return array(
       'controller' => 'gallery',
       'action' => 'viewcategory',
       'parameters' => array(
-        'category' => '(\w*)',
+        'category' => '([\w-]*)',
       ),
     ),
   ),

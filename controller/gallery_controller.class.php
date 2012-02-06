@@ -9,7 +9,7 @@ class GalleryController extends Controller {
 
   public function index() {
     $stmt = $this->_db->prepare('SELECT id, name, description, front_image, directory FROM
-      gallery_category WHERE visible = TRUE');
+      gallery_category WHERE visible = TRUE ORDER BY name ASC');
     $stmt->execute();
     
     $this->_tpl->assign('galleryCount', $stmt->rowCount());

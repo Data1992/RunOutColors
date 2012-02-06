@@ -26,7 +26,7 @@
         </li>
         <li>
           <a href="#">
-            <img src="/images/menu/4.jpg" alt="" />
+            <img src="/images/menu/2.jpg" alt="" />
             <span class="active"></span>
             <span class="wrap">
               <span class="link">Artist</span>
@@ -36,7 +36,7 @@
         </li>
         <li>
           <a href="/blog">
-            <img src="/images/menu/2.jpg" alt="" />
+            <img src="/images/menu/4.jpg" alt="" />
             <span class="active"></span>
             <span class="wrap">
               <span class="link">Snaps</span>

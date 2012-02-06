@@ -6,11 +6,14 @@
 require_once 'controller.class.php';
 class BlogController extends Controller {
 
-  protected $_models = array('blog_post');
   protected $_defaultAction = 'index';
 
   public function index() {
-    $this->_tpl->assign('post', BlogPost::loadById(1));
+    $stmt = $this->_db->prepare('SELECT caption, text, edited FROM blog_post WHERE id = 1');
+    $stmt->execute();
+    
+    $row = $stmt->fetch();
+    $this->_tpl->assign('post', $row);
   }
 
 }

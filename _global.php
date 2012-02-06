@@ -9,7 +9,6 @@ define('CONFIG_DIR',     ROOT_DIR . DS . 'config');
 define('LIBRARY_DIR',    ROOT_DIR . DS . 'library');
 define('CONTROLLER_DIR', ROOT_DIR . DS . 'controller');
 define('TEMPLATE_DIR',   ROOT_DIR . DS . 'templates');
-define('MODEL_DIR',      ROOT_DIR . DS . 'models');
 define('TEMP_DIR',       ROOT_DIR . DS . 'temp');
 define('DEBUG', true);
 

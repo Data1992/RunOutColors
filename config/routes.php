@@ -25,6 +25,16 @@ return array(
       'action' => 'index',
     ),
   ),
+  'gallery-category' => array(
+    'route' => '/gallery/:category',
+    'options' => array(
+      'controller' => 'gallery',
+      'action' => 'viewcategory',
+      'parameters' => array(
+        'category' => '(\w*)',
+      ),
+    ),
+  ),
   'imprint' => array(
     'route' => '/imprint',
     'options' => array(

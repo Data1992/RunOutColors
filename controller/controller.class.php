@@ -14,19 +14,7 @@ abstract class Controller {
   protected $_tpl;
   protected $_layoutTpl = null;
   
-  protected $_models = array();
   protected $_defaultAction = null;
-  
-  public function __construct() {
-    if(is_array($this->_models)) {
-      foreach($this->_models as $model) {
-        $modelFile = MODEL_DIR . DS . $model . '.class.php';
-        if(file_exists($modelFile) && is_readable($modelFile))
-          require_once $modelFile;
-        else throw new ErrorException('Model <i>'.$model.'</i> does not exist.');
-      }
-    }
-  }
   
   public function setParameters(array $params) {
     $this->_params = $params;
@@ -38,13 +26,6 @@ abstract class Controller {
   
   public function setDbConnection($db) {
     $this->_db = $db;
-    foreach($this->_models as $model) {
-      $modelClass = '';
-      $parts = explode('_', $model);
-      while(!empty($parts))
-        $modelClass .= ucfirst(array_shift($parts));
-      $modelClass::setDb($this->_db);
-    }
   }
   
   public function assignToLayout($name, $value = null) {

@@ -3,22 +3,23 @@
  * (c)2012 Marc Dannemann
  */
 @font-face {
-    font-family: 'OpificioRegular';
-      src: url('opificio/opificio-webfont.eot');
-      src: url('opificio/opificio-webfont.eot?#iefix') format('embedded-opentype'),
-           url('opificio/opificio-webfont.woff') format('woff'),
-           url('opificio/opificio-webfont.ttf') format('truetype'),
-           url('opificio/opificio-webfont.svg#OpificioRegular') format('svg');
-    font-weight: normal;
-    font-style: normal;
+  font-family: 'RandiRegular';
+    src:  url('randi/randi-webfont.eot');
+    src:  url('randi/randi-webfont.eot?#iefix') format('embedded-opentype'),
+          url('randi/randi-webfont.woff') format('woff'),
+          url('randi/randi-webfont.ttf') format('truetype'),
+          url('randi/randi-webfont.svg#RandiRegular') format('svg');
+  font-weight: normal;
+  font-style: normal;
 }
 
 * { margin: 0; padding: 0; }
 body { color: #FFF; font-family: "Tahoma", sans-serif; padding: 10px; background: url(images/bg.jpg) no-repeat fixed; }
-a { color: #FFF; }
+a { color: #FFF; text-decoration: none; }
+a:hover { text-decoration: underline; color: #2B2; }
 
 #root { width: 850px; margin: 0 auto; position: relative; right: 100px; }
-#banner { width: 100%; height: 100px; background: #000 url(images/banner.png) no-repeat; }
+#banner { width: 100%; height: 206px; background: #000 url(images/banner.png) no-repeat; }
 #content { width: 100%; min-height: 1000px; background-color: rgba(50,50,50,0.6); }
 #content-inner { width: 95%; padding: 10px; }
 #footer { width: 100%; padding: 0; background: #000; }
@@ -44,7 +45,7 @@ a { color: #FFF; }
  * http://tympanus.net/codrops/2010/07/16/slide-down-box-menu/
  */
 #menu { width: 100%; height: 85px; }
-#menu ul { margin: 0; padding: 0; list-style: none; font-family: "OpificioRegular", "Myriad Pro", sans-serif; font-size: 14px; width: 100%; }
+#menu ul { margin: 0; padding: 0; list-style: none; font-family: "RandiRegular", "Myriad Pro", sans-serif; font-size: 14px; width: 100%; }
 #menu ul a { text-decoration: none; outline: none; }
 #menu ul li { float: left; width: 170px; height: 85px; position: relative; cursor: pointer; }
 #menu ul li > a { position: absolute; top: 0; left: 0; width: 170px; height: 85px; z-index: 12;
@@ -55,16 +56,18 @@ a { color: #FFF; }
 #menu ul li span.active { position: absolute; background: #111; top: 85px; width: 170px; height: 0px;
   left: 0; z-index: 15; box-shadow: 0px 0px 4px #000 inset; opacity: 0.95; }
 #menu ul li span span.link, #menu ul li span span.descr, #menu ul li div.box a { margin-left: 15px;
-  text-transform: uppercase; text-shadow: 1px 1px 1px #22B; }
+  text-transform: uppercase; text-shadow: 2px 2px 2px #040; }
 #menu ul li span span.link { color: #FFF; font-size: 24px; float: left; clear: both; }
-#menu ul li span span.descr { color: #0B75AF; float: left; clear: both; width: 155px; font-size: 10px; letter-spacing: 1px; }
+#menu ul li span span.descr { color: #2B2; float: left; clear: both; width: 155px; font-size: 10px; letter-spacing: 1px; }
 #menu ul li div.box { display: block; position: absolute; width: 170px; overflow: hidden; height: 170px;
   top: 85px; left: 0; display: none; background: #000; opacity: 0.8; }
-#menu ul li div.box a { float: left; clear: both; line-height: 30px; color: #0B75AF; }
+#menu ul li div.box a { float: left; clear: both; line-height: 30px; color: #2B2; }
 #menu ul li div.box a:first-child { margin-top: 15px; }
 #menu ul li div.box a:hover { color: #FFF; }
 
-.gallery-category { margin: 5px; border: 1px solid #FFF; height: 64px; }
-.gallery-category img { width: 60px; height: 60px; border: 1px solid #FFF; background-color: #FFF; padding: 2px; float: left; }
+/* Gallery */
+.gallery-category { margin: 5px; border: 1px solid #FFF; height: 62px; }
+.gallery-category img { width: 60px; height: 60px; background-color: #FFF; padding: 1px; float: left; }
 .gallery-category div.title { margin: 2px 7px; width: 150px; font-size: 16px; font-weight: bold; float: left; height: 60px; }
 .gallery-category div.descr { margin: 2px; }
+#gallery-images td { width: 300px; }

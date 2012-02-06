@@ -8,6 +8,9 @@ require 'admin-functions.php';
 define('MAX_FILE_SIZE', 1024*1024);
 define('GALLERY_PATH', '../images/gallery');
 
+if(isset($_GET['destroy']) && intval($_GET['destroy']) == 1)
+  session_destroy();
+
 if(!isset($_SESSION['step']) || $_SESSION['step'] < 1 || $_SESSION['step'] > 2)
   $_SESSION['step'] = 1;
 $errorOccured = false;
@@ -56,24 +59,30 @@ if($_SESSION['step'] == 1 && isset($_FILES['image'])) {
     }
   }
 } elseif($_SESSION['step'] == 2 && isset($_POST['category'])) {
-  $categoryFolder = GALLERY_PATH . '/' . $_POST['category'];
-  if(!is_dir($categoryFolder) && !mkdir($categoryFolder)) {
+  $category = get_gallery_category_by_id($_POST['category']);
+  if($category === false) {
     $errorOccured = true;
-    $errorMessage = "Category folder does not exist and couldn't be created!";
+    $errorMessage = "Category does not exist!";
   } else {
-    $fullSourcePath = GALLERY_PATH . '/.upload/' . $_SESSION['uploadedFile'];
-    $fullDestPath = GALLERY_PATH .'/' . $_POST['category'] . '/' . $_SESSION['uploadedFile'];
-    if(!copy($fullSourcePath, $fullDestPath)) {
+    $fullCategoryFolder = GALLERY_PATH . '/' . $category['directory'];
+    if(!is_dir($fullCategoryFolder) && !mkdir($fullCategoryFolder)) {
       $errorOccured = true;
-      $errorMessage = "Impossible to copy file into category folder!";
+      $errorMessage = "Category folder does not exist and couldn't be created!";
     } else {
-      if(!add_gallery_image($_SESSION['uploadedFile'], $_POST['category'])) {
+      $fullSourcePath = GALLERY_PATH . '/.upload/' . $_SESSION['uploadedFile'];
+      $fullDestPath = $fullCategoryFolder . '/' . $_SESSION['uploadedFile'];
+      if(!copy($fullSourcePath, $fullDestPath)) {
         $errorOccured = true;
-        $errorMessage = "Couldn't set category for image {$_SESSION['uploadedFile']}!";
+        $errorMessage = "Impossible to copy file into category folder!";
       } else {
-        $_SESSION['step'] = 1;
-        unlink($fullSourcePath);
-        unset($_SESSION['uploadedFile']);
+        if(!add_gallery_image($_SESSION['uploadedFile'], $_POST['category'])) {
+          $errorOccured = true;
+          $errorMessage = "Couldn't set category for image {$_SESSION['uploadedFile']}!";
+        } else {
+          $_SESSION['step'] = 1;
+          unlink($fullSourcePath);
+          unset($_SESSION['uploadedFile']);
+        }
       }
     }
   }
@@ -87,8 +96,8 @@ if($_SESSION['step'] == 1 && isset($_FILES['image'])) {
     <style type="text/css">
       * { margin: 0; padding: 0; }
       body { background: #111; color: #FFF; font-family: Arial, sans-serif; }
-      h2 { color: #0B75AF; margin: 20px; }
-      h3 { color: #0B75AF; margin-bottom: 5px; }
+      h2 { color: #2B2; margin: 20px; }
+      h3 { color: #2B2; margin-bottom: 5px; }
       div { margin-left: 50px; margin-bottom: 10px; padding: 10px; }
       
       #upload-form, #category-form { border: 1px solid #FFF; width: 70%; }
@@ -97,7 +106,8 @@ if($_SESSION['step'] == 1 && isset($_FILES['image'])) {
       input[type=submit] {
         border: 1px solid #FFF; color: #FFF; background: #111; padding: 5px 10px; }
         
-      #category-form, #category-form img { float: left; }
+      #category-form { float: left; }
+      #category-form img { float: left; padding: 5px; }
     </style>
   </head>
   <body>

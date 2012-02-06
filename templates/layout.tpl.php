@@ -4,10 +4,10 @@
   <title>RunOutColors</title>
   <meta charset="utf-8" />
   <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
-  <link rel="stylesheet" type="text/css" href="screen.css" type="screen" />
-  <script src="js/jquery.min.js"></script>
-  <script src="js/jquery.easing.1.3.js"></script>
-  <script src="js/roc.js"></script>
+  <link rel="stylesheet" type="text/css" href="/screen.css" type="screen" />
+  <script src="/js/jquery.min.js"></script>
+  <script src="/js/jquery.easing.1.3.js"></script>
+  <script src="/js/roc.js"></script>
 </head>
 <body>
   <div id="root">
@@ -15,57 +15,57 @@
     <div id="menu">
       <ul>
         <li>
-          <a href="./">
-            <img src="images/menu/1.jpg" alt="" />
+          <a href="/">
+            <img src="/images/menu/1.jpg" alt="" />
             <span class="active"></span>
             <span class="wrap">
-              <span class="link">Startseite</span>
+              <span class="link">Home</span>
               <span class="descr">Neuigkeiten</span>
             </span>
           </a>
         </li>
         <li>
-          <a href="./blog">
-            <img src="images/menu/2.jpg" alt="" />
+          <a href="#">
+            <img src="/images/menu/4.jpg" alt="" />
             <span class="active"></span>
             <span class="wrap">
-              <span class="link">Blog</span>
-              <span class="descr">Tell The Story</span>
+              <span class="link">Artist</span>
+              <span class="descr">Biographie</span>
             </span>
           </a>
         </li>
         <li>
-          <a href="./gallery">
-            <img src="images/menu/3.jpg" alt="" />
+          <a href="/blog">
+            <img src="/images/menu/2.jpg" alt="" />
+            <span class="active"></span>
+            <span class="wrap">
+              <span class="link">Snaps</span>
+              <span class="descr">Das Foto-Blog</span>
+            </span>
+          </a>
+        </li>
+        <li>
+          <a href="/gallery">
+            <img src="/images/menu/3.jpg" alt="" />
             <span class="active"></span>
             <span class="wrap">
               <span class="link">Gallery</span>
-              <span class="descr"></span>
+              <span class="descr">Impressionen</span>
             </span>
           </a>
         </li>
         <li>
           <a href="#">
-            <img src="images/menu/4.jpg" alt="" />
-            <span class="active"></span>
-            <span class="wrap">
-              <span class="link">Link 4</span>
-              <span class="descr">Subtitle 4</span>
-            </span>
-          </a>
-        </li>
-        <li>
-          <a href="#">
-            <img src="images/menu/5.jpg" alt="" />
+            <img src="/images/menu/5.jpg" alt="" />
             <span class="active"></span>
             <span class="wrap">
               <span class="link">About</span>
-              <span class="descr"></span>
+              <span class="descr">Der letzte Rest</span>
             </span>
           </a>
           <div class="box">
             <a href="#">Disclaimer</a>
-            <a href="./imprint">Impressum</a>
+            <a href="/imprint">Impressum</a>
           </div>
         </li>
       </ul>

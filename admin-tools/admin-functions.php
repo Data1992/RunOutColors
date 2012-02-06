@@ -8,9 +8,11 @@ require_once '../_global.php';
 function get_gallery_category_by_id($id) {
   global $db;
   try {
-    $stmt = $db->prepare('SELECT id, name FROM gallery_category WHERE id = ? LIMIT 1');
+    $stmt = $db->prepare('SELECT id, name, directory FROM gallery_category WHERE id = ? LIMIT 1');
     $stmt->execute(array($id));
-    return $stmt->fetch();
+    if($stmt->rowCount() > 0)
+      return $stmt->fetch();
+    else return false;
   } catch(Exception $e) {
     die($e->getMessage);
   }

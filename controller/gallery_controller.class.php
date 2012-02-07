@@ -20,6 +20,8 @@ class GalleryController extends Controller {
     $stmt = $this->_db->prepare('SELECT id, name FROM gallery_category WHERE directory = ?');
     $stmt->execute(array($this->_params['category']));
     $category = $stmt->fetch();
+    if($category === false)
+      throw new ErrorException('Category <i>'.$this->_params['category'].'</i> was not found.');
     $this->_tpl->assign('category', $category['name']);
     
     $stmt = $this->_db->prepare('SELECT id, file FROM gallery_image WHERE category = ?');

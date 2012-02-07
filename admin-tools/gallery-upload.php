@@ -6,7 +6,6 @@
 session_start();
 require 'admin-functions.php';
 define('MAX_FILE_SIZE', 1024*1024);
-define('GALLERY_PATH', '../images/gallery');
 
 if(isset($_GET['destroy']) && intval($_GET['destroy']) == 1)
   session_destroy();

@@ -4,6 +4,58 @@
  * (c)2012 Marc Dannemann
  */
 require_once '../_global.php';
+define('GALLERY_PATH', '../images/gallery');
+
+function create_gallery_thumbnails($category_id, $width, $height, $folder, $force = false) {
+  $category = get_gallery_category_by_id($category_id);
+  if($category === false)
+    return;
+  $dir = GALLERY_PATH . DS . $category['directory'];
+  $thumb_dir = $dir . DS . $folder;
+  if(!is_dir($thumb_dir))
+    mkdir($thumb_dir);
+  
+  $dh = opendir($dir);
+  while(($file = readdir($dh)) !== false) {
+    if(is_dir($dir . DS . $file))
+      continue;
+    
+    $current_thumb = $thumb_dir . DS . basename($file);
+    $create_thumbnail = false;
+    if($force === true) $create_thumbnail = true;
+    else if(file_exists($current_thumb)) {
+      $info = getimagesize($current_thumb);
+      if($info[0] != $width || $info[1] != $height)
+        $create_thumbnail = true;
+    } else $create_thumbnail = true;
+    
+    if($create_thumbnail) {
+      $image = imagecreatefromjpeg($dir . DS . $file);
+      $thumb = imagecreatetruecolor($width, $height);
+      $image_w = imagesx($image);
+      $image_h = imagesy($image);
+      $image_ratio = round($image_w / $image_h, 2);
+      $thumb_ratio = round($width / $height, 2);
+
+      if($image_ratio == $thumb_ratio) {
+        imagecopyresized($thumb, $image, 0, 0, 0, 0, $width, $height, $image_w, $image_h);
+      } else {
+        if($image_ratio < 1) {
+          $part = floor($image_w / $thumb_ratio);
+          $offset = floor(($image_h - $part) / 2);
+          imagecopyresized($thumb, $image, 0, 0, 0, $offset, $width, $height, $image_w, $part);
+        } else {
+          $part = floor($image_h * $thumb_ratio);
+          $offset = floor(($image_w - $part) / 2); 
+          imagecopyresized($thumb, $image, 0, 0, $offset, 0, $width, $height, $part, $image_h);
+        }
+      }
+      imagejpeg($thumb, $current_thumb, 95);
+      imagedestroy($thumb);
+      imagedestroy($image);
+    }
+  }
+}
  
 function get_gallery_category_by_id($id) {
   global $db;

@@ -5,13 +5,13 @@
  */
 session_start();
 require 'admin-functions.php';
-define('GALLERY_PATH', '../images/gallery');
 
 $selected_category = null;
 if(isset($_POST['create-category'])) {
   $new_category =  trim($_POST['create-category']);
   if($new_category != '')
-    $selected_category = add_gallery_category($_POST['new-category'], $_POST['description'], isset($_POST['visible']) && ($_POST['visible'] == true));
+    $selected_category = add_gallery_category($_POST['new-category'], $_POST['description'], 
+      isset($_POST['visible']) && ($_POST['visible'] == true));
 } elseif(isset($_POST['choose-category'])) {
   $selected_category = intval($_POST['category']);
 } elseif(isset($_POST['edit-category'])) {
@@ -23,6 +23,26 @@ if(isset($_POST['create-category'])) {
   ));
 } elseif(isset($_POST['delete-category'])) {
   delete_gallery_category(intval($_POST['category']));
+} elseif(isset($_POST['generate-thumbs'])) {
+  $width = 0;
+  $height = 0;
+  $directory = '';
+  switch($_POST['size']) {
+    case 'smallest':
+      $width = $height = 50;
+      break;
+    case 'small':
+      $width = 200; $height = 150;
+      break;
+    case 'middle':
+    default:
+      $width = 400; $height = 300;
+      break;
+    case 'big':
+      $width = 800; $height = 600;
+      break;
+  }
+  create_gallery_thumbnails($_POST['category'], $width, $height, $_POST['size'], isset($_POST['force']));
 }
 
 ?>
@@ -90,7 +110,6 @@ if(isset($_POST['create-category'])) {
 <?php if($selected_category != null): ?>
 <?php $category = get_gallery_category_by_id($selected_category); ?>
     <div id="edit-category-form">
-      <form method="post" class="inrow"><input type="submit" name="generate-thumbs" value="Thumbnails" /></form>
       <form method="post" class="inrow"><input type="submit" name="manage-images" value="Bilderverwaltung" /></form>
       <form method="post" class="inrow">
         <input type="hidden" name="category" value="<?php echo $category['id']; ?>" />
@@ -109,6 +128,19 @@ if(isset($_POST['create-category'])) {
         <input type="hidden" name="category" value="<?php echo $category['id']; ?>" />
         <input type="submit" name="edit-category" value="Speichern" />
         <input type="submit" name="back" value="Zur&uuml;ck" /><br />
+      </form>
+      <p style="margin-top: 5px;"><i>Vorschaubilder erstellen:</i></p>
+      <form method="post">
+        <input type="hidden" name="category" value="<?php echo $category['id']; ?>" />
+        <span>Gr&ouml;&szlig;e: </span><br />
+        <select name="size">
+          <option value="smallest">Sehr klein (50x50)</option>
+          <option value="small">Klein (200x150)</option>
+          <option value="middle">Mittel (400x300)</option>
+          <option value="big">Gro&szlig; (800x600)</option>
+        </select><br />
+        <input type="checkbox" name="force" /> Erzwingen<br />
+        <input type="submit" name="generate-thumbs" value="Generieren" />
       </form>
     </div>
 <?php endif; ?>

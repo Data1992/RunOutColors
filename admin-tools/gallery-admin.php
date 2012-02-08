@@ -6,16 +6,16 @@
 session_start();
 require 'admin-functions.php';
 
-$selected_category = null;
-if(isset($_POST['create-category'])) {
+$selected_category = (isset($_POST['category']) ? intval($_POST['category']) : null);
+if(isset($_POST['back'])) {
+  $selected_category = null;
+} else if(isset($_POST['create-category'])) {
   $new_category =  trim($_POST['create-category']);
   if($new_category != '')
     $selected_category = add_gallery_category($_POST['new-category'], $_POST['description'], 
       isset($_POST['visible']) && ($_POST['visible'] == true));
-} elseif(isset($_POST['choose-category'])) {
-  $selected_category = intval($_POST['category']);
 } elseif(isset($_POST['edit-category'])) {
-  edit_gallery_category(intval($_POST['category']), array(
+  edit_gallery_category(intval($selected_category), array(
     'name' => $_POST['category-name'],
     'visible' => (isset($_POST['category-visible']) && !empty($_POST['category-visible']) ? '1' : '0'),
     'description' => htmlentities($_POST['category-description']),
@@ -42,7 +42,9 @@ if(isset($_POST['create-category'])) {
       $width = 800; $height = 600;
       break;
   }
-  create_gallery_thumbnails($_POST['category'], $width, $height, $_POST['size'], isset($_POST['force']));
+  create_gallery_thumbnails($selected_category, $width, $height, $_POST['size'], isset($_POST['force']));
+} elseif(isset($_POST['delete-images'])) {
+  delete_gallery_images(array_values($_POST['delete-image']), $selected_category);
 }
 
 ?>
@@ -56,7 +58,7 @@ if(isset($_POST['create-category'])) {
       body { background: #111; color: #FFF; font-family: Arial, sans-serif; }
       h2 { color: #2B2; margin: 20px; }
       h3 { color: #2B2; margin-bottom: 5px; }
-      div { margin-left: 50px; margin-bottom: 10px; padding: 10px; border: 1px solid #FFF; width: 70%; }
+      div { margin-left: 50px; margin-bottom: 10px; padding: 10px; border: 1px solid #FFF; }
       
       form { margin-left: 15px; }
       form.inrow { display: inline; }
@@ -74,6 +76,9 @@ if(isset($_POST['create-category'])) {
 <?php endif; ?>
       #choose-category-form, #edit-category-form { width: 40%; float: left; }
       #choose-category-form:after { clear: both; }
+      #manage-images { width: 40%; float: left; margin-top: -100px; height: 400px; overflow: auto;}
+      #manage-images td { padding: 5px; }
+      #manage-images td img { border: 1px solid #FFF; }
     </style>
     <script type="text/javascript">
       function confirmSubmit(message) {
@@ -110,7 +115,9 @@ if(isset($_POST['create-category'])) {
 <?php if($selected_category != null): ?>
 <?php $category = get_gallery_category_by_id($selected_category); ?>
     <div id="edit-category-form">
-      <form method="post" class="inrow"><input type="submit" name="manage-images" value="Bilderverwaltung" /></form>
+      <form method="post" class="inrow">
+        <input type="hidden" name="category" value="<?php echo $category['id']; ?>" />
+        <input type="submit" name="manage-images" value="Bilderverwaltung" /></form>
       <form method="post" class="inrow">
         <input type="hidden" name="category" value="<?php echo $category['id']; ?>" />
         <input type="submit" name="delete-category" value="L&Ouml;SCHEN" onclick="return confirmSubmit('Wirklich l&ouml;schen?');" />
@@ -143,6 +150,34 @@ if(isset($_POST['create-category'])) {
         <input type="submit" name="generate-thumbs" value="Generieren" />
       </form>
     </div>
+<?php if(isset($_POST['manage-images']) || isset($_POST['delete-images'])): ?>
+<?php 
+  $thumb_path = get_gallery_category_thumb_path($selected_category, 'smallest');
+  $images = get_gallery_images($selected_category);
+  $image_count = count($images);
+?>
+    <div id="manage-images">
+      <p><i>Bilder:</i></p>
+<?php if($image_count > 0): ?>
+      <form method="post">
+        <table>
+<?php for($i=0; $i<$image_count; $i++): ?>
+<?php if($i % 6 == 0): ?><tr><?php endif; ?>
+          <td align="center">
+            <img src="<?php echo $thumb_path . DS . $images[$i]['file']; ?>" /><br />
+            <input type="checkbox" name="delete-image[<?php echo $i; ?>]" value="<?php echo $images[$i]['id']; ?>" /><small>L&ouml;schen</small>
+          </td>
+<?php if($i % 6 == 5): ?></tr><?php endif; ?>
+<?php endfor; ?>
+        </table>
+        <input type="hidden" name="category" value="<?php echo $category['id']; ?>" />
+        <input type="submit" name="delete-images" value="Best&auml;tigen" onclick="return confirmSubmit('Wirklich l&ouml;schen?');" />
+      </form>
+<?php else: ?>
+      <p>Keine Bilder in dieser Kategorie vorhanden.</p>
+<?php endif; ?>
+    </div>
+<?php endif; ?>
 <?php endif; ?>
   </body>
 </html>

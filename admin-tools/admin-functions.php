@@ -6,6 +6,18 @@
 require_once '../_global.php';
 define('GALLERY_PATH', '../images/gallery');
 
+function get_gallery_thumb_types() {
+  return array('smallest', 'small', 'middle', 'big');
+}
+
+function get_gallery_category_thumb_path($category_id, $thumb_type) {
+  $thumb_types = get_gallery_thumb_types();
+  if(!in_array($thumb_type, $thumb_types))
+    $thumb_type = 'middle';
+  $category = get_gallery_category_by_id($category_id);
+  return GALLERY_PATH . DS . $category['directory'] . DS . $thumb_type;
+}
+
 function create_gallery_thumbnails($category_id, $width, $height, $folder, $force = false) {
   $category = get_gallery_category_by_id($category_id);
   if($category === false)
@@ -66,7 +78,7 @@ function get_gallery_category_by_id($id) {
       return $stmt->fetch();
     else return false;
   } catch(Exception $e) {
-    die($e->getMessage);
+    die($e->getMessage());
   }
 }
  
@@ -77,7 +89,7 @@ function get_gallery_categories() {
     $stmt->execute();
     return $stmt->fetchAll();
   } catch(Exception $e) {
-    die($e->getMessage);
+    die($e->getMessage());
   }
 }
 
@@ -90,7 +102,7 @@ function add_gallery_category($name, $description, $visible) {
     $result = $stmt->fetch();
     return $result['id'];
   } catch(Exception $e) {
-    die($e->getMessage);
+    die($e->getMessage());
   }
 }
 
@@ -133,4 +145,61 @@ function add_gallery_image($image, $category_id) {
   } catch(Exception $e) {
     return false;
   }
+}
+
+function get_gallery_images($category_id) {
+  global $db;
+  try {
+    $stmt = $db->prepare('SELECT id, file FROM gallery_image WHERE category = ?');
+    $stmt->execute(array($category_id));
+    return $stmt->fetchAll();
+  } catch(Exception $e) {
+    die($e->getMessage());
+  }
+}
+
+function delete_gallery_images($images, $category_id) {
+  global $db;
+  if(!is_array($images)) $images = (array)$images;
+  // delete from file system
+  $sql = 'SELECT i.file, c.directory FROM gallery_image i INNER JOIN gallery_category c
+    ON i.category = c.id WHERE (';
+  foreach($images as $image_id)
+    $sql .= 'i.id = ? OR ';
+  $sql = substr($sql, 0, -4) . ') AND i.category = ?';
+  $parameters = $images;
+  $parameters[] = $category_id;
+  try {
+    $stmt = $db->prepare($sql);
+    $stmt->execute($parameters);
+    $image_info = $stmt->fetchAll();
+    
+    foreach($image_info as $info) {
+      $base_path = GALLERY_PATH . DS . $info['directory'];
+      $thumb_types = get_gallery_thumb_types();
+      foreach($thumb_types as $thumb_type) {
+        $thumbnail = $base_path . DS . $thumb_type . DS . $info['file'];
+        if(file_exists($thumbnail)) {
+          unlink($thumbnail);
+        }
+      }
+      $original = $base_path . DS . $info['file'];
+      if(file_exists($original)) {
+        unlink($original);
+      }
+    }
+    
+    // delete from db
+    $sql = 'DELETE FROM gallery_image WHERE ';
+    foreach($images as $image_id) {
+      $sql .= 'id = ? OR ';
+    }
+    $sql = substr($sql, 0, -4);
+    $stmt = $db->prepare($sql);
+    $stmt->execute($images);
+    return true;
+  } catch(Exception $e) {
+    return false;
+  }
+  die;
 }

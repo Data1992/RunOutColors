@@ -3,7 +3,6 @@
  * Run Out Colors Project Page
  * (c)2012 Marc Dannemann
  */
- 
 require_once 'controller.class.php';
 class GalleryController extends Controller {
 
@@ -17,12 +16,12 @@ class GalleryController extends Controller {
   }
   
   public function viewcategory() {
-    $stmt = $this->_db->prepare('SELECT id, name FROM gallery_category WHERE directory = ?');
+    $stmt = $this->_db->prepare('SELECT id, name, directory FROM gallery_category WHERE directory = ?');
     $stmt->execute(array($this->_params['category']));
     $category = $stmt->fetch();
     if($category === false)
       throw new ErrorException('Category <i>'.$this->_params['category'].'</i> was not found.');
-    $this->_tpl->assign('category', $category['name']);
+    $this->_tpl->assign('category', $category);
     
     $stmt = $this->_db->prepare('SELECT id, file FROM gallery_image WHERE category = ?');
     $stmt->execute(array($category['id']));
@@ -32,4 +31,3 @@ class GalleryController extends Controller {
   }
 
 }
-

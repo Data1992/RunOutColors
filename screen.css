@@ -17,6 +17,7 @@
 body { color: #FFF; font-family: "Tahoma", sans-serif; padding: 10px; background: url(images/bg.jpg) no-repeat fixed; }
 a { color: #FFF; text-decoration: none; }
 a:hover { text-decoration: underline; color: #2B2; }
+h2 a { text-decoration: underline; }
 
 #root { width: 850px; margin: 0 auto; position: relative; right: 100px; }
 #banner { width: 100%; height: 206px; background: #000 url(images/banner.png) no-repeat; }
@@ -70,4 +71,6 @@ a:hover { text-decoration: underline; color: #2B2; }
 .gallery-category img { width: 60px; height: 60px; background-color: #FFF; padding: 1px; float: left; }
 .gallery-category div.title { margin: 2px 7px; width: 150px; font-size: 16px; font-weight: bold; float: left; height: 60px; }
 .gallery-category div.descr { margin: 2px; }
-#gallery-images td { width: 300px; }
+#gallery-images td { width: 300px; padding: 10px; }
+#gallery-images img { border: 5px solid #CCC; }
+#gallery-images img:hover { border: 5px solid #2B2; }

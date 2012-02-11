@@ -1,4 +1,5 @@
 <h2><a href="/gallery">Gallery</a> :: <?php echo $category['name']; ?></h2>
+
 <table id="gallery-images">
 <?php $image_count = count($images); ?>
 <?php for($i=0; $i<$image_count;$i++): ?>
@@ -10,10 +11,17 @@
     <img src="/images/gallery/<?php echo $directory; ?>/small/<?php echo $image['file']; ?>" alt="<?php echo $image['file']; ?>" />
   </a>
   <script>
-    $('.lightbox#image-<?php echo $hash; ?>').click(function() {
-      var html = $("<img src='/images/gallery/<?php echo $directory; ?>/big/<?php echo $image['file']; ?>' />");
 <?php $info = getimagesize($_SERVER['DOCUMENT_ROOT'] . '/images/gallery/' . $directory . '/big/' . $image['file']); ?>
-      $.lightbox(html, { width: <?php echo $info[0]; ?>, height: <?php echo $info[1]+3; ?> });
+<?php $width = $info[0] < 800 ? 800 : $info[0]; ?>
+    $('.lightbox#image-<?php echo $hash; ?>').click(function() {
+      var html = $('<div id="lb-content"><center><img src="/images/gallery/<?php echo $directory; ?>/big/<?php echo $image['file']; ?>" /></center><br />'
+       + '</div><div class="fb-comments" data-href="<?php echo $_SERVER['HTTP_HOST']; ?>/gallery/<?php echo $category['directory']; ?>/'
+       + '<?php echo $image['id']; ?>" data-num-posts="5" data-width="<?php echo $width; ?>" data-colorscheme="light"></div>');
+      $.lightbox(html, { 
+        width: <?php echo $width+20; ?>, 
+        height: <?php echo $info[1]+150; ?>,
+        onOpen: function() { FB.XFBML.parse(); }
+      });
       return false;
     });
   </script>

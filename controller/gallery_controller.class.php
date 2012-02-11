@@ -31,7 +31,7 @@ class GalleryController extends Controller {
   }
   
   public function viewimage() {
-    $stmt = $this->_db->prepare('SELECT i.file, c.directory, c.name FROM gallery_image i INNER JOIN gallery_category c
+    $stmt = $this->_db->prepare('SELECT i.id, i.file, c.directory, c.name FROM gallery_image i INNER JOIN gallery_category c
       ON i.category = c.id WHERE i.id = ? AND c.directory = ?');
     $stmt->execute(array($this->_params['id'], $this->_params['category']));
     $result = $stmt->fetch();

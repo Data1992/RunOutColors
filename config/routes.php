@@ -25,6 +25,17 @@ return array(
       'action' => 'index',
     ),
   ),
+  'gallery-image' => array(
+    'route' => '/gallery/:category/:id',
+    'options' => array(
+      'controller' => 'gallery',
+      'action' => 'viewimage',
+      'parameters' => array(
+        'category' => '([\w-]*)',
+        'id' => 'numeric',
+      ),
+    ),
+  ),
   'gallery-category' => array(
     'route' => '/gallery/:category',
     'options' => array(

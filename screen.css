@@ -74,3 +74,6 @@ h2 a { text-decoration: underline; }
 #gallery-images td { width: 300px; padding: 10px; }
 #gallery-images img { border: 5px solid #CCC; }
 #gallery-images img:hover { border: 5px solid #2B2; }
+#gallery-image-full { margin: 25px 0 0 20px; }
+#gallery-image-full img { max-width: 750px; display: block; }
+#gallery-image-full a:link { text-decoration: underline; }

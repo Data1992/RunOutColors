@@ -50,19 +50,19 @@ function create_gallery_thumbnails($category_id, $width, $height, $folder, $forc
       $thumb_ratio = round($width / $height, 2);
 
       if($image_ratio == $thumb_ratio) {
-        imagecopyresized($thumb, $image, 0, 0, 0, 0, $width, $height, $image_w, $image_h);
+        imagecopyresampled($thumb, $image, 0, 0, 0, 0, $width, $height, $image_w, $image_h);
       } else {
         if($image_ratio < 1) {
           $part = floor($image_w / $thumb_ratio);
           $offset = floor(($image_h - $part) / 2);
-          imagecopyresized($thumb, $image, 0, 0, 0, $offset, $width, $height, $image_w, $part);
+          imagecopyresampled($thumb, $image, 0, 0, 0, $offset, $width, $height, $image_w, $part);
         } else {
           $part = floor($image_h * $thumb_ratio);
           $offset = floor(($image_w - $part) / 2); 
-          imagecopyresized($thumb, $image, 0, 0, $offset, 0, $width, $height, $part, $image_h);
+          imagecopyresampled($thumb, $image, 0, 0, $offset, 0, $width, $height, $part, $image_h);
         }
       }
-      imagejpeg($thumb, $current_thumb, 95);
+      imagejpeg($thumb, $current_thumb, 100);
       imagedestroy($thumb);
       imagedestroy($image);
     }

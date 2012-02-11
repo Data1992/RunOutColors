@@ -67,8 +67,8 @@ h2 a { text-decoration: underline; }
 #menu ul li div.box a:hover { color: #FFF; }
 
 /* Gallery */
-.gallery-category { margin: 5px; border: 1px solid #FFF; height: 60px; }
-.gallery-category img { width: 60px; height: 60px; background: #FFF; border: 1px solid #FFF; margin: -1px; float: left; }
+.gallery-category { margin: 5px; height: 60px; }
+.gallery-category img { width: 60px; height: 60px; background: #FFF; margin: -1px; float: left; }
 .gallery-category div.title { margin: 2px 7px; width: 150px; font-size: 16px; font-weight: bold; float: left; height: 60px; }
 .gallery-category div.descr { margin: 2px; }
 #gallery-images td { width: 300px; padding: 10px; }

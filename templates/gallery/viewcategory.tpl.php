@@ -12,7 +12,8 @@
   <script>
     $('.lightbox#image-<?php echo $hash; ?>').click(function() {
       var html = $("<img src='/images/gallery/<?php echo $directory; ?>/big/<?php echo $image['file']; ?>' />");
-      $.lightbox(html, { width: 800, height: 603 });
+<?php $info = getimagesize($_SERVER['DOCUMENT_ROOT'] . '/images/gallery/' . $directory . '/big/' . $image['file']); ?>
+      $.lightbox(html, { width: <?php echo $info[0]; ?>, height: <?php echo $info[1]+3; ?> });
       return false;
     });
   </script>

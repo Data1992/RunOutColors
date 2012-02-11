@@ -4,7 +4,6 @@
  * (c)2012 Marc Dannemann
  */
 require_once '../_global.php';
-define('GALLERY_PATH', '../images/gallery');
 
 function get_gallery_thumb_types() {
   return array('smallest', 'small', 'middle', 'big');
@@ -18,7 +17,7 @@ function get_gallery_category_thumb_path($category_id, $thumb_type) {
   return GALLERY_PATH . DS . $category['directory'] . DS . $thumb_type;
 }
 
-function create_gallery_thumbnails($category_id, $width, $height, $folder, $force = false) {
+function create_gallery_thumbnails($category_id, $width, $height, $folder, $force = false) {  
   $category = get_gallery_category_by_id($category_id);
   if($category === false)
     return;
@@ -42,6 +41,8 @@ function create_gallery_thumbnails($category_id, $width, $height, $folder, $forc
     } else $create_thumbnail = true;
     
     if($create_thumbnail) {
+      $thumb_width = $width;
+      $thumb_height = $height;
       $image = imagecreatefromjpeg($dir . DS . $file);
       $thumb = imagecreatetruecolor($width, $height);
       $image_w = imagesx($image);
@@ -49,7 +50,17 @@ function create_gallery_thumbnails($category_id, $width, $height, $folder, $forc
       $image_ratio = round($image_w / $image_h, 2);
       $thumb_ratio = round($width / $height, 2);
 
-      if($image_ratio == $thumb_ratio) {
+      if($folder == 'big') {
+        if($width > $image_w || $height > $image_h) {
+          if($thumb_ratio > $image_ratio) {
+            $thumb_width = $height * $image_ratio;
+          } else {
+            $thumb_height = $width / $image_ratio;
+          }
+        }
+        $thumb = imagecreatetruecolor($thumb_width, $thumb_height);
+        imagecopyresampled($thumb, $image, 0, 0, 0, 0, $thumb_width, $thumb_height, $image_w, $image_h);
+      } elseif($image_ratio == $thumb_ratio) {
         imagecopyresampled($thumb, $image, 0, 0, 0, 0, $width, $height, $image_w, $image_h);
       } else {
         if($image_ratio < 1) {

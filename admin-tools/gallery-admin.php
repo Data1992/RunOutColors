@@ -34,10 +34,7 @@ if(isset($_POST['back'])) {
     case 'small':
       $width = 200; $height = 150;
       break;
-    case 'middle':
     default:
-      $width = 400; $height = 300;
-      break;
     case 'big':
       $width = 800; $height = 600;
       break;
@@ -143,8 +140,7 @@ if(isset($_POST['back'])) {
         <select name="size">
           <option value="smallest">Sehr klein (50x50)</option>
           <option value="small">Klein (200x150)</option>
-          <option value="middle">Mittel (400x300)</option>
-          <option value="big">Gro&szlig; (800x600)</option>
+          <option value="big">Gro&szlig; (gleiches Verh&auml;ltnis)</option>
         </select><br />
         <input type="checkbox" name="force" /> Erzwingen<br />
         <input type="submit" name="generate-thumbs" value="Generieren" />

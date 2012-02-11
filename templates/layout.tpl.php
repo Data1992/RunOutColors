@@ -3,7 +3,7 @@
 <head>
   <title>RunOutColors</title>
   <meta charset="utf-8" />
-  <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
+  <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
   <link rel="stylesheet" type="text/css" href="/screen.css" type="screen" />
   <link rel="stylesheet" type="text/css" href="/jquery.lightbox.css" type="screen" />
   <script src="/js/jquery.min.js"></script>

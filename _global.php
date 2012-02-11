@@ -10,6 +10,7 @@ define('LIBRARY_DIR',    ROOT_DIR . DS . 'library');
 define('CONTROLLER_DIR', ROOT_DIR . DS . 'controller');
 define('TEMPLATE_DIR',   ROOT_DIR . DS . 'templates');
 define('TEMP_DIR',       ROOT_DIR . DS . 'temp');
+define('GALLERY_PATH',   ROOT_DIR . DS . 'images' . DS . 'gallery');
 define('DEBUG', true);
 
 require LIBRARY_DIR . DS . 'functions.php';

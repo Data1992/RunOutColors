@@ -1,14 +1,21 @@
 <h2>Gallery</h2>
-<?php foreach($galleries as $gallery) : ?>
-<div class="gallery-category">
+<table id="gallery-categories">
+<?php $gallery_count = count($galleries); ?>
+<?php for($i=0; $i<$gallery_count;$i++): ?>
+<?php $gallery = $galleries[$i]; ?>
+<?php if($i % 3 == 0): ?><tr><?php endif; ?>
+<td align="center" width="25%">
 <?php $gallery_thumb = (empty($gallery['front_image']) 
                        ? 'images/camera.gif' 
-                       : 'images/gallery/'.$gallery['directory'].'/smallest/'.$gallery['front_image']); ?>
-  <img src="<?php echo $gallery_thumb; ?>" />
-  <div class="title"><a href="./gallery/<?php echo $gallery['directory']; ?>"><?php echo $gallery['name']; ?></a></div>
+                       : 'images/gallery/'.$gallery['directory'].'/small/'.$gallery['front_image']); ?>
+  <a href="./gallery/<?php echo $gallery['directory']; ?>">
+    <div class="title"><?php echo $gallery['name']; ?></div>
+    <img src="<?php echo $gallery_thumb; ?>" />
+  </a>
   <div class="descr">
-    <?php echo $gallery['description']; ?>
+    <?php echo substr($gallery['description'], 0, 100).(strlen($gallery['description']) > 100 ? '...' : ''); ?>
   </div>
-</div>
-<?php endforeach; ?>
-
+</td>
+<?php if($i % 3 == 2 || $i == $gallery_count): ?></tr><?php endif; ?>
+<?php endfor; ?>
+</table>

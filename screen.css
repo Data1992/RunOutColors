@@ -67,13 +67,13 @@ h2 a { text-decoration: underline; }
 #menu ul li div.box a:hover { color: #FFF; }
 
 /* Gallery */
-.gallery-category { margin: 5px; height: 60px; }
-.gallery-category img { width: 60px; height: 60px; background: #FFF; margin: -1px; float: left; }
-.gallery-category div.title { margin: 2px 7px; width: 150px; font-size: 16px; font-weight: bold; float: left; height: 60px; }
-.gallery-category div.descr { margin: 2px; }
+#gallery-categories a:hover { text-decoration: none; }
+#gallery-categories img { max-height: 120px; background-color: #FFF; }
+#gallery-categories div.title { margin: 0px 7px; width: 150px; font-size: 16px; font-weight: bold; }
+#gallery-categories div.descr { margin: 10px 5px; font-size: 11px; }
 #gallery-images td { width: 300px; padding: 10px; }
-#gallery-images img { border: 5px solid #CCC; }
-#gallery-images img:hover { border: 5px solid #2B2; }
+#gallery-images img, #gallery-categories img { border: 5px solid #CCC; }
+#gallery-images img:hover, #gallery-categories img:hover { border: 5px solid #2B2; }
 #gallery-image-full { margin: 25px 0 0 20px; }
 #gallery-image-full img { max-width: 750px; display: block; }
 #gallery-image-full a:link { text-decoration: underline; }

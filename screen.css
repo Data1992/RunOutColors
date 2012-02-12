@@ -81,7 +81,5 @@ h2 a { text-decoration: underline; }
 
 /* Facebook Integration */
 #lb-content { width: 100%; }
-#lb-content a:link { color: #000; }
-#lb-content a:hover { color: #2B2; }
 #lb-content .fb-comments { width: 100%; overflow: auto; }
 #gallery-image-full .fb-comments { margin-top: 20px; }

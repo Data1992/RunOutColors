@@ -11,6 +11,13 @@ return array(
       'action' => 'home',
     ),
   ),
+  'artist' => array(
+    'route' => '/the-artist',
+    'options' => array(
+      'controller' => 'static',
+      'action' => 'artist',
+    ),
+  ),
   'blog-index' => array(
     'route' => '/blog',
     'options' => array(
@@ -23,6 +30,17 @@ return array(
     'options' => array(
       'controller' => 'gallery',
       'action' => 'index',
+    ),
+  ),
+  'gallery-download' => array(
+    'route' => '/gallery/:category/download/:id',
+    'options' => array(
+      'controller' => 'gallery',
+      'action' => 'downloadimage',
+      'parameters' => array(
+        'category' => '([\w-]*)',
+        'id' => 'numeric',
+      ),
     ),
   ),
   'gallery-image' => array(

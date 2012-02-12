@@ -23,7 +23,7 @@ class GalleryController extends Controller {
       throw new ErrorException('Category <i>'.$this->_params['category'].'</i> was not found.');
     $this->_tpl->assign('category', $category);
     
-    $stmt = $this->_db->prepare('SELECT id, file FROM gallery_image WHERE category = ?');
+    $stmt = $this->_db->prepare('SELECT id, file, downloadable FROM gallery_image WHERE category = ?');
     $stmt->execute(array($category['id']));
     $images = $stmt->fetchAll();
     $this->_tpl->assign('directory', $this->_params['category']);
@@ -31,13 +31,29 @@ class GalleryController extends Controller {
   }
   
   public function viewimage() {
-    $stmt = $this->_db->prepare('SELECT i.id, i.file, c.directory, c.name FROM gallery_image i INNER JOIN gallery_category c
+    $stmt = $this->_db->prepare('SELECT i.id, i.file, i.downloadable, c.directory, c.name FROM gallery_image i INNER JOIN gallery_category c
       ON i.category = c.id WHERE i.id = ? AND c.directory = ?');
     $stmt->execute(array($this->_params['id'], $this->_params['category']));
     $result = $stmt->fetch();
     if($result === false)
       throw new ErrorException('Image does not exist.');
     $this->_tpl->assign('result', $result);
+  }
+  
+  public function downloadimage() {
+    $stmt = $this->_db->prepare('SELECT i.id, i.file, i.downloadable, c.directory, c.download_directory AS download
+      FROM gallery_image i INNER JOIN gallery_category c
+      ON i.category = c.id WHERE i.id = ? AND c.directory = ?');
+    $stmt->execute(array($this->_params['id'], $this->_params['category']));
+    $result = $stmt->fetch();
+    if($result === false || $result['downloadable'] !== true)
+      throw new ErrorException('Image does not exist.');
+    $file_content = file_get_contents(GALLERY_PATH . DS . $result['directory'] . DS . $result['download'] . DS . $result['file']);
+    
+    header("Content-Disposition: attachment; filename=".$result['file']);
+    header("Content-Type: image/jpeg");
+    echo $file_content;
+    exit;
   }
 
 }

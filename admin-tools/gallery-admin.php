@@ -20,9 +20,11 @@ if(isset($_POST['back'])) {
     'visible' => (isset($_POST['category-visible']) && !empty($_POST['category-visible']) ? '1' : '0'),
     'description' => htmlentities($_POST['category-description']),
     'directory' => $_POST['category-directory'],
+    'front_image' => $_POST['category-preview'],
   ));
 } elseif(isset($_POST['delete-category'])) {
-  delete_gallery_category(intval($_POST['category']));
+  delete_gallery_category($selected_category);
+  $selected_category = null;
 } elseif(isset($_POST['generate-thumbs'])) {
   $width = 0;
   $height = 0;
@@ -40,8 +42,11 @@ if(isset($_POST['back'])) {
       break;
   }
   create_gallery_thumbnails($selected_category, $width, $height, $_POST['size'], isset($_POST['force']));
-} elseif(isset($_POST['delete-images'])) {
-  delete_gallery_images(array_values($_POST['delete-image']), $selected_category);
+} elseif(isset($_POST['confirm-manage-images'])) {
+  if(isset($_POST['delete-image']))
+    delete_gallery_images(array_values($_POST['delete-image']), $selected_category);
+  if(isset($_POST['downloadable']))
+    setdl_gallery_images(array_values($_POST['downloadable']), $selected_category);
 }
 
 ?>
@@ -125,6 +130,13 @@ if(isset($_POST['back'])) {
         <input type="text" name="category-name" value="<?php echo $category['name']; ?>" />
         <input type="checkbox" name="category-visible"<?php echo ($category['visible'] == true) ? ' checked="checked"' : ''; ?> />
         <span>Sichtbar?</span><br />
+        <span>Vorschaubild:</span><br />
+        <select name="category-preview">
+<?php $images = get_gallery_images($selected_category); ?>
+<?php foreach($images as $image): ?>
+          <option value="<?php echo $image['file']; ?>" <?php echo ($image['file'] == $category['front_image'] ? 'selected="selected"' : ''); ?>><?php echo $image['file']; ?></option>
+<?php endforeach; ?>
+        </select><br />
         <span>Verzeichnis:</span><br />
         <input type="text" name="category-directory" value="<?php echo $category['directory']; ?>" /><br />
         <span>Beschreibung:</span><br />
@@ -146,7 +158,7 @@ if(isset($_POST['back'])) {
         <input type="submit" name="generate-thumbs" value="Generieren" />
       </form>
     </div>
-<?php if(isset($_POST['manage-images']) || isset($_POST['delete-images'])): ?>
+<?php if(isset($_POST['manage-images']) || isset($_POST['confirm-manage-images'])): ?>
 <?php 
   $thumb_path = get_gallery_category_thumb_path($selected_category, 'smallest');
   $images = get_gallery_images($selected_category);
@@ -159,15 +171,16 @@ if(isset($_POST['back'])) {
         <table>
 <?php for($i=0; $i<$image_count; $i++): ?>
 <?php if($i % 6 == 0): ?><tr><?php endif; ?>
-          <td align="center">
-            <img src="<?php echo $thumb_path . DS . $images[$i]['file']; ?>" /><br />
-            <input type="checkbox" name="delete-image[<?php echo $i; ?>]" value="<?php echo $images[$i]['id']; ?>" /><small>L&ouml;schen</small>
+          <td align="left">
+            <center><img src="<?php echo $thumb_path . DS . $images[$i]['file']; ?>" /></center>
+            <input type="checkbox" name="delete-image[<?php echo $i; ?>]" value="<?php echo $images[$i]['id']; ?>" /><small style="color: red">L&ouml;schen</small><br />
+            <input type="checkbox" name="downloadable[<?php echo $i; ?>]" value="<?php echo $images[$i]['id']; ?>" <?php echo ($images[$i]['downloadable'] ? 'checked="checked"' : ''); ?> /><small>DL?</small>
           </td>
 <?php if($i % 6 == 5): ?></tr><?php endif; ?>
 <?php endfor; ?>
         </table>
         <input type="hidden" name="category" value="<?php echo $category['id']; ?>" />
-        <input type="submit" name="delete-images" value="Best&auml;tigen" onclick="return confirmSubmit('Wirklich l&ouml;schen?');" />
+        <input type="submit" name="confirm-manage-images" value="Best&auml;tigen" />
       </form>
 <?php else: ?>
       <p>Keine Bilder in dieser Kategorie vorhanden.</p>

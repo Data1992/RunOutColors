@@ -19,7 +19,11 @@ class StaticController extends Controller {
   }
   
   public function imprint() {
+    // static template only!
+  }
   
+  public function artist() {
+    // static template only!
   }
 
 }

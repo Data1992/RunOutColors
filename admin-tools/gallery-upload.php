@@ -5,7 +5,7 @@
  */
 session_start();
 require 'admin-functions.php';
-define('MAX_FILE_SIZE', 1024*1024);
+define('MAX_FILE_SIZE', 1024*1024*10);
 
 if(isset($_GET['destroy']) && intval($_GET['destroy']) == 1)
   session_destroy();
@@ -48,7 +48,7 @@ if($_SESSION['step'] == 1 && isset($_FILES['image'])) {
   }
 
   if(!$errorOccured) {
-    $uploadFilePath = GALLERY_PATH . '/.upload/'.$image['name'];
+    $uploadFilePath = GALLERY_WEB_PATH . '/.upload/'.$image['name'];
     if(!move_uploaded_file($image['tmp_name'], $uploadFilePath)) {
       $errorOccured = true;
       $errorMessage = "Couldn't move uploaded file to gallery!";
@@ -68,19 +68,25 @@ if($_SESSION['step'] == 1 && isset($_FILES['image'])) {
       $errorOccured = true;
       $errorMessage = "Category folder does not exist and couldn't be created!";
     } else {
-      $fullSourcePath = GALLERY_PATH . '/.upload/' . $_SESSION['uploadedFile'];
-      $fullDestPath = $fullCategoryFolder . '/' . $_SESSION['uploadedFile'];
-      if(!copy($fullSourcePath, $fullDestPath)) {
+      $destDir = $fullCategoryFolder . '/' . $category['download_directory'];
+      if(!is_dir($destDir) && !mkdir($destDir)) {
         $errorOccured = true;
-        $errorMessage = "Impossible to copy file into category folder!";
+        $errorMessage = "Download folder does not exist and couldn't be created!";
       } else {
-        if(!add_gallery_image($_SESSION['uploadedFile'], $_POST['category'])) {
+        $fullSourcePath = GALLERY_PATH . '/.upload/' . $_SESSION['uploadedFile'];
+        $fullDestPath = $destDir . '/' . $_SESSION['uploadedFile'];
+        if(!copy($fullSourcePath, $fullDestPath)) {
           $errorOccured = true;
-          $errorMessage = "Couldn't set category for image {$_SESSION['uploadedFile']}!";
+          $errorMessage = "Impossible to copy file into category folder!";
         } else {
-          $_SESSION['step'] = 1;
-          unlink($fullSourcePath);
-          unset($_SESSION['uploadedFile']);
+          if(!add_gallery_image($_SESSION['uploadedFile'], $_POST['category'])) {
+            $errorOccured = true;
+            $errorMessage = "Couldn't set category for image {$_SESSION['uploadedFile']}!";
+          } else {
+            $_SESSION['step'] = 1;
+            unlink($fullSourcePath);
+            unset($_SESSION['uploadedFile']);
+          }
         }
       }
     }

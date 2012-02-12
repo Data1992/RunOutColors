@@ -4,6 +4,22 @@
  * (c)2012 Marc Dannemann
  */
 require_once '../_global.php';
+define('GALLERY_WEB_PATH', '../images/gallery');
+
+function rrmdir($dir) {
+  if (is_dir($dir)) { 
+    $objects = scandir($dir); 
+    foreach ($objects as $object) { 
+      if ($object != "." && $object != "..") { 
+        if(filetype($dir."/".$object) == "dir")
+          rrmdir($dir."/".$object);
+        else unlink($dir."/".$object); 
+      } 
+    } 
+    reset($objects); 
+    rmdir($dir); 
+  } 
+}
 
 function get_gallery_thumb_types() {
   return array('smallest', 'small', 'middle', 'big');
@@ -14,7 +30,7 @@ function get_gallery_category_thumb_path($category_id, $thumb_type) {
   if(!in_array($thumb_type, $thumb_types))
     $thumb_type = 'middle';
   $category = get_gallery_category_by_id($category_id);
-  return GALLERY_PATH . DS . $category['directory'] . DS . $thumb_type;
+  return GALLERY_WEB_PATH . DS . $category['directory'] . DS . $thumb_type;
 }
 
 function create_gallery_thumbnails($category_id, $width, $height, $folder, $force = false) {  
@@ -23,12 +39,13 @@ function create_gallery_thumbnails($category_id, $width, $height, $folder, $forc
     return;
   $dir = GALLERY_PATH . DS . $category['directory'];
   $thumb_dir = $dir . DS . $folder;
+  $orig_dir = $dir . DS . $category['download_directory'];
   if(!is_dir($thumb_dir))
     mkdir($thumb_dir);
   
-  $dh = opendir($dir);
+  $dh = opendir($orig_dir);
   while(($file = readdir($dh)) !== false) {
-    if(is_dir($dir . DS . $file))
+    if(is_dir($orig_dir . DS . $file))
       continue;
     
     $current_thumb = $thumb_dir . DS . basename($file);
@@ -43,7 +60,7 @@ function create_gallery_thumbnails($category_id, $width, $height, $folder, $forc
     if($create_thumbnail) {
       $thumb_width = $width;
       $thumb_height = $height;
-      $image = imagecreatefromjpeg($dir . DS . $file);
+      $image = imagecreatefromjpeg($orig_dir . DS . $file);
       $thumb = imagecreatetruecolor($width, $height);
       $image_w = imagesx($image);
       $image_h = imagesy($image);
@@ -51,12 +68,10 @@ function create_gallery_thumbnails($category_id, $width, $height, $folder, $forc
       $thumb_ratio = round($width / $height, 2);
 
       if($folder == 'big') {
-        if($width > $image_w || $height > $image_h) {
-          if($thumb_ratio > $image_ratio) {
-            $thumb_width = $height * $image_ratio;
-          } else {
-            $thumb_height = $width / $image_ratio;
-          }
+        if($thumb_ratio > $image_ratio) {
+          $thumb_width = $height * $image_ratio;
+        } else {
+          $thumb_height = $width / $image_ratio;
         }
         $thumb = imagecreatetruecolor($thumb_width, $thumb_height);
         imagecopyresampled($thumb, $image, 0, 0, 0, 0, $thumb_width, $thumb_height, $image_w, $image_h);
@@ -83,7 +98,8 @@ function create_gallery_thumbnails($category_id, $width, $height, $folder, $forc
 function get_gallery_category_by_id($id) {
   global $db;
   try {
-    $stmt = $db->prepare('SELECT id, name, description, directory, visible FROM gallery_category WHERE id = ? LIMIT 1');
+    $stmt = $db->prepare('SELECT id, name, description, directory, download_directory, visible,
+      front_image FROM gallery_category WHERE id = ? LIMIT 1');
     $stmt->execute(array($id));
     if($stmt->rowCount() > 0)
       return $stmt->fetch();
@@ -108,8 +124,8 @@ function add_gallery_category($name, $description, $visible) {
   global $db;
   $directory = strtolower(preg_replace('#-+#', '-', preg_replace('#[^A-Za-z0-9]#', '-', $name)));
   try {
-    $stmt = $db->prepare('INSERT INTO gallery_category(name, description, directory, visible) VALUES(?, ?, ?, ?) RETURNING id');
-    $stmt->execute(array($name, $description, $directory, $visible));
+    $stmt = $db->prepare('INSERT INTO gallery_category(name, description, directory, download_directory, visible) VALUES(?, ?, ?, ?, ?) RETURNING id');
+    $stmt->execute(array($name, $description, $directory, substr(sha1(mt_rand().$name), 0, 25), $visible));
     $result = $stmt->fetch();
     return $result['id'];
   } catch(Exception $e) {
@@ -139,8 +155,15 @@ function edit_gallery_category($id, $values) {
 function delete_gallery_category($id) {
   global $db;
   try {
-    $stmt = $db->prepare('DELETE FROM gallery_category WHERE id = ?');
+    $stmt = $db->prepare('SELECT id, directory FROM gallery_category WHERE id = ?');
     $stmt->execute(array($id));
+    $category = $stmt->fetch();
+    $categoryFolder = GALLERY_PATH . DS . $category['directory'];
+    rrmdir($categoryFolder);
+    $stmt = $db->prepare('DELETE FROM gallery_image WHERE category = ?');
+    $stmt->execute(array($category['id']));
+    $stmt = $db->prepare('DELETE FROM gallery_category WHERE id = ?');
+    $stmt->execute(array($category['id']));
     return true;
   } catch(Exception $e) {
     return false;
@@ -158,10 +181,27 @@ function add_gallery_image($image, $category_id) {
   }
 }
 
+function setdl_gallery_images($downloadables, $category_id) {
+  global $db;
+  $images = get_gallery_images($category_id);
+  $image_count = count($images);
+  try {
+    $db->beginTransaction();
+    for($i=0; $i<$image_count; $i++) {
+      $images[$i]['downloadable'] = (in_array($images[$i]['id'], $downloadables)) ? 'TRUE' : 'FALSE';
+      $stmt = $db->prepare('UPDATE gallery_image SET downloadable = ? WHERE id = ?');
+      $stmt->execute(array($images[$i]['downloadable'], $images[$i]['id']));
+    }
+    $db->commit();
+  } catch(Exception $e) {
+    $db->rollBack();
+  }
+}
+
 function get_gallery_images($category_id) {
   global $db;
   try {
-    $stmt = $db->prepare('SELECT id, file FROM gallery_image WHERE category = ?');
+    $stmt = $db->prepare('SELECT id, file, downloadable FROM gallery_image WHERE category = ?');
     $stmt->execute(array($category_id));
     return $stmt->fetchAll();
   } catch(Exception $e) {
@@ -171,10 +211,13 @@ function get_gallery_images($category_id) {
 
 function delete_gallery_images($images, $category_id) {
   global $db;
+  if($images == null || (is_array($images) && empty($images)))
+    return;
+  
   if(!is_array($images)) $images = (array)$images;
   // delete from file system
-  $sql = 'SELECT i.file, c.directory FROM gallery_image i INNER JOIN gallery_category c
-    ON i.category = c.id WHERE (';
+  $sql = 'SELECT i.file, c.directory, c.download_directory FROM gallery_image i 
+    INNER JOIN gallery_category c ON i.category = c.id WHERE (';
   foreach($images as $image_id)
     $sql .= 'i.id = ? OR ';
   $sql = substr($sql, 0, -4) . ') AND i.category = ?';
@@ -194,7 +237,7 @@ function delete_gallery_images($images, $category_id) {
           unlink($thumbnail);
         }
       }
-      $original = $base_path . DS . $info['file'];
+      $original = $base_path . DS . $info['download_directory'] . DS . $info['file'];
       if(file_exists($original)) {
         unlink($original);
       }

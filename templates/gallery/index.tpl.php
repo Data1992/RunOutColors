@@ -5,7 +5,8 @@
 <?php $gallery = $galleries[$i]; ?>
 <?php if($i % 3 == 0): ?><tr><?php endif; ?>
 <td align="center" width="25%">
-<?php $gallery_thumb = (empty($gallery['front_image']) 
+<?php $gallery_thumb = (empty($gallery['front_image']) || 
+                        !file_exists(GALLERY_PATH.'/'.$gallery['directory'].'/small/'.$gallery['front_image'])
                        ? 'images/camera.gif' 
                        : 'images/gallery/'.$gallery['directory'].'/small/'.$gallery['front_image']); ?>
   <a href="./gallery/<?php echo $gallery['directory']; ?>">

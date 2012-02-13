@@ -23,7 +23,7 @@ h2 a { text-decoration: underline; }
 #root { width: 850px; margin: 0 auto; position: relative; right: 100px; }
 #banner { width: 100%; height: 206px; background: #000 url(images/banner.png) no-repeat; }
 #content { width: 100%; min-height: 1000px; background-color: rgba(50,50,50,0.6); }
-#content-inner { width: 95%; padding: 10px; }
+#content-inner { width: 97%; padding: 10px; }
 #footer { width: 100%; padding: 0; background: #000; }
 #copyright { width: 200px; height: 20px; font-size: 11px; margin: 0 auto; padding-top: 5px; text-align: center; }
 #debug { width: 100%; margin: 0 auto; font-size: 11px; font-family: Courier; color: #FFF; background: #000; }
@@ -75,7 +75,6 @@ h2 a { text-decoration: underline; }
 #gallery-images td { width: 300px; padding: 10px; }
 #gallery-images img, #gallery-categories img { border: 5px solid #CCC; }
 #gallery-images img:hover, #gallery-categories img:hover { border: 5px solid #2B2; }
-#gallery-image-full { margin: 25px 0 0 20px; }
 #gallery-image-full img { max-width: 750px; display: block; }
 #gallery-image-full a:link { text-decoration: underline; }
 

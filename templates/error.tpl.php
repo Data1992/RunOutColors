@@ -3,8 +3,6 @@
 <head>
   <title>RunOutColors</title>
   <meta charset="utf-8" />
-<?php $config = Configuration::getInstance('default.php'); ?>
-  <meta property="fb:app_id" content="<?php echo $config['facebook']['app_id']; ?>" />
   <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
   <link rel="stylesheet" type="text/css" href="/screen.css" type="screen" />
   <link rel="stylesheet" type="text/css" href="/jquery.lightbox.css" type="screen" />
@@ -13,14 +11,6 @@
   <script src="/js/roc.js"></script>
 </head>
 <body>
-  <div id="fb-root"></div>
-  <script>(function(d, s, id) {
-    var js, fjs = d.getElementsByTagName(s)[0];
-    if (d.getElementById(id)) return;
-    js = d.createElement(s); js.id = id;
-    js.src = "https://connect.facebook.net/de_DE/all.js#xfbml=1";
-    fjs.parentNode.insertBefore(js, fjs);
-    }(document, 'script', 'facebook-jssdk'));</script>
   <div id="root">
     <div id="banner"></div>
     <div id="menu">
@@ -83,14 +73,16 @@
     </div>
     <div id="content">
       <div id="content-inner">
-<?php echo $content; ?>
+        <h2>Fehler</h2>
+        <p>
+          ##CONTENT##
+        </p>
       </div>
     </div>
     <div id="footer">
       <div id="copyright">
         &copy;<?php echo date('Y', time()); ?> RunOutColors
       </div>
-<?php echo $debug; ?>
     </div>
   </div>
   <div id="advertising">
@@ -109,24 +101,6 @@
       <li>Werbung</li>
       <li>Werbung</li>
       <li>Werbung</li>
-    </ul>
-  </div>
-  <div id="twitterfeed">
-    <ul>
-      <span>Latests Tweets</span>
-<?php $tweets = Twitter::getLatestTweets(5); ?>
-<?php if(is_array($tweets)): ?>
-<?php   foreach($tweets as $tweet): ?>
-      <li class="tweet">
-        <img src="<?php echo $tweet['image_url']; ?>" />
-        <a href="http://www.twitter.com/<?php echo $tweet['user']; ?>/status/<?php echo $tweet['id']; ?>" target="_blank">
-          <?php echo $tweet['text']; ?>
-        </a>
-      </li>
-<?php   endforeach; ?>
-<?php else: ?>
-      <li><?php echo $tweets; ?></li>
-<?php endif; ?>
     </ul>
   </div>
 </body>

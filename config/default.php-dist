@@ -21,6 +21,6 @@ return array(
     'user_secret'     => '',
   ),
   'facebook' => array(
-    'admins' => array(),    // quoted (!) facebook user ids of admins here
+    'app_id' => '',
   ),
 );

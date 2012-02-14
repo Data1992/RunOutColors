@@ -4,6 +4,10 @@
  * (c)2012 Marc Dannemann
  */
 session_start();
+if(!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
+  header('Location: login.php');
+}
+/************************************************************************/
 require 'admin-functions.php';
 define('MAX_FILE_SIZE', 1024*1024*10);
 
@@ -113,10 +117,16 @@ if($_SESSION['step'] == 1 && isset($_FILES['image'])) {
         
       #category-form { float: left; }
       #category-form img { float: left; padding: 5px; }
+      
+      #links { position: fixed; top: 0; right: -3px; background: #FFF; border: 3px solid #2B2; }
+      #links a { color: black; }
     </style>
   </head>
   <body>
     <h2>RunOutColors :: Gallery Upload Tool</h2>
+    <div id="links">
+      <a href="index.php">Index</a> 
+    </div>
 <?php if($_SESSION['step'] == 1): ?>
     <div id="upload-form">
       <form enctype="multipart/form-data" method="post">

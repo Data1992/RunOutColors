@@ -4,6 +4,10 @@
  * (c)2012 Marc Dannemann
  */
 session_start();
+if(!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
+  header('Location: login.php');
+}
+/************************************************************************/
 require 'admin-functions.php';
 
 $selected_category = (isset($_POST['category']) ? intval($_POST['category']) : null);
@@ -78,9 +82,12 @@ if(isset($_POST['back'])) {
 <?php endif; ?>
       #choose-category-form, #edit-category-form { width: 40%; float: left; }
       #choose-category-form:after { clear: both; }
-      #manage-images { width: 40%; float: left; margin-top: -100px; height: 400px; overflow: auto;}
+      #manage-images { width: 40%; float: left; margin-top: -180px; height: 400px; overflow: auto;}
       #manage-images td { padding: 5px; }
       #manage-images td img { border: 1px solid #FFF; }
+      
+      #links { position: fixed; top: 0; right: -3px; background: #FFF; border: 3px solid #2B2; }
+      #links a { color: black; }
     </style>
     <script type="text/javascript">
       function confirmSubmit(message) {
@@ -91,6 +98,9 @@ if(isset($_POST['back'])) {
   </head>
   <body>
     <h2>RunOutColors :: Gallery Administration</h2>
+    <div id="links">
+      <a href="index.php">Index</a> 
+    </div>
     <div id="choose-category-form">
       <p><i>Kategorie ausw&auml;hlen:</i></p>
       <form method="post">

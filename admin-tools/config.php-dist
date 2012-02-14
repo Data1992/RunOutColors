@@ -1,0 +1,8 @@
+<?php
+/**
+ * Run Out Colors Project Page
+ * (c)2012 Marc Dannemann
+ */
+return array(
+  'admin' => sha1('password'),
+);

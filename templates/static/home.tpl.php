@@ -1,5 +1,6 @@
 <div class="entry">
-  <?php echo html_entity_decode($message); ?>
-</div>
-<span>zuletzt bearbeitet: <i><?php echo strftime('%d. %B %Y, %H:%M', strtotime($timestamp)); ?></i></span>
-<?php echo getenv('LANG'); ?>
+	<h2>
+		Willkommen bei RunOutColors!</h2>
+	<span>letzte &Auml;nderung: <i>14. Februar 2012, 00:58 Uhr</i></span></div>
+<p>
+	&nbsp;</p>

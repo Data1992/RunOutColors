@@ -9,6 +9,7 @@ if(!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
 }
 /************************************************************************/
 $page = (isset($_GET['page']) && in_array($_GET['page'], array('home', 'artist', 'imprint')) ? $_GET['page'] : 'home');
+
 if(isset($_POST['update-page'])) {
   $content = $_POST['page-content'];
   file_put_contents('../templates/static/'.$page.'.tpl.php', $content);
@@ -72,6 +73,7 @@ if(isset($_POST['update-page'])) {
           ],
           height: 500,
           width: 800,
+          uiColor: '#000',
         };
         $('#editor').ckeditor(config);
       });

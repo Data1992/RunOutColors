@@ -25,6 +25,16 @@ return array(
       'action' => 'index',
     ),
   ),
+  'blog-index-paged' => array(
+    'route' => '/blog/page/:page',
+    'options' => array(
+      'controller' => 'blog',
+      'action' => 'index',
+      'parameters' => array(
+        'page' => 'numeric',
+      ),
+    ),
+  ),
   'gallery-index' => array(
     'route' => '/gallery',
     'options' => array(

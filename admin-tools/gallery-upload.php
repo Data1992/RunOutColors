@@ -62,7 +62,7 @@ if($_SESSION['step'] == 1 && isset($_FILES['image'])) {
     }
   }
 } elseif($_SESSION['step'] == 2 && isset($_POST['category'])) {
-  $category = get_gallery_category_by_id($_POST['category']);
+  $category = get_gallery_category_by('id', $_POST['category']);
   if($category === false) {
     $errorOccured = true;
     $errorMessage = "Category does not exist!";

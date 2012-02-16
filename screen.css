@@ -18,12 +18,13 @@ body { color: #FFF; font-family: "Tahoma", sans-serif; padding: 10px; background
 a { color: #FFF; text-decoration: none; }
 a:hover { text-decoration: underline; color: #2B2; }
 h2 a { text-decoration: underline; }
+ul, ol { list-style-position: inside; }
 .hidden { display: none; }
 
 #root { width: 850px; margin: 0 auto; position: relative; right: 100px; }
 #banner { width: 100%; height: 206px; background: #000 url(images/banner.png) no-repeat; }
-#content { width: 100%; min-height: 1000px; background-color: rgba(50,50,50,0.6); }
-#content-inner { width: 97%; padding: 10px; }
+#content { width: 100%; background-color: rgba(50,50,50,0.6); }
+#content-inner { width: 97%; padding: 10px; min-height: 500px; }
 #footer { width: 100%; padding: 0; background: #000; }
 #copyright { width: 200px; height: 20px; font-size: 11px; margin: 0 auto; padding-top: 5px; text-align: center; }
 #debug { width: 100%; margin: 0 auto; font-size: 11px; font-family: Courier; color: #FFF; background: #000; }
@@ -67,11 +68,15 @@ h2 a { text-decoration: underline; }
 #menu ul li div.box a:first-child { margin-top: 15px; }
 #menu ul li div.box a:hover { color: #FFF; }
 
-/* Main Page */
+/* Articles */
 .entry { margin-bottom: 15px; }
-.entry .content { background: rgba(100,100,100,0.2); font-size: 14px; padding: 2px 10px; margin: 5px; }
+.entry .content { background: rgba(100,100,100,0.2); font-size: 14px; padding: 2px 10px; margin: 5px; min-height: 30px; }
 .entry p { margin: 5px 0; }
 .entry span { font-size: 11px; }
+
+#pagination { width: 100%; background: rgba(0,0,0,0.6); }
+#pagination td { padding: 2px 5px; }
+#pagination a { text-decoration: underline; }
 
 /* Gallery */
 #gallery-categories a:hover { text-decoration: none; }

@@ -21,6 +21,23 @@ function rrmdir($dir) {
   } 
 }
 
+/* GALLERY FUNCTIONS
+ *************************************************
+ * get_gallery_thumb_types
+ * get_gallery_category_thumb_path
+ * create_gallery_thumbnails 
+ * get_gallery_category_by_id
+ * get_gallery_category_by_folder
+ * get_gallery_categories 
+ * add_gallery_category 
+ * edit_gallery_category
+ * delete_gallery_category 
+ * add_gallery_image 
+ * setdl_gallery_images
+ * get_gallery_images
+ * delete_gallery_images
+ */
+
 function get_gallery_thumb_types() {
   return array('smallest', 'small', 'middle', 'big');
 }
@@ -29,12 +46,12 @@ function get_gallery_category_thumb_path($category_id, $thumb_type) {
   $thumb_types = get_gallery_thumb_types();
   if(!in_array($thumb_type, $thumb_types))
     $thumb_type = 'middle';
-  $category = get_gallery_category_by_id($category_id);
+  $category = get_gallery_category_by('id', $category_id);
   return GALLERY_WEB_PATH . DS . $category['directory'] . DS . $thumb_type;
 }
 
 function create_gallery_thumbnails($category_id, $width, $height, $folder, $force = false) {  
-  $category = get_gallery_category_by_id($category_id);
+  $category = get_gallery_category_by_id('id', $category_id);
   if($category === false)
     return;
   $dir = GALLERY_PATH . DS . $category['directory'];
@@ -94,13 +111,13 @@ function create_gallery_thumbnails($category_id, $width, $height, $folder, $forc
     }
   }
 }
- 
-function get_gallery_category_by_id($id) {
+
+function get_gallery_category_by($column, $value) {
   global $db;
   try {
     $stmt = $db->prepare('SELECT id, name, description, directory, download_directory, visible,
-      front_image FROM gallery_category WHERE id = ? LIMIT 1');
-    $stmt->execute(array($id));
+      front_image FROM gallery_category WHERE '.$column.' = ? LIMIT 1');
+    $stmt->execute(array($value));
     if($stmt->rowCount() > 0)
       return $stmt->fetch();
     else return false;
@@ -123,9 +140,11 @@ function get_gallery_categories() {
 function add_gallery_category($name, $description, $visible) {
   global $db;
   $directory = strtolower(preg_replace('#-+#', '-', preg_replace('#[^A-Za-z0-9]#', '-', $name)));
+  $download_directory = substr(sha1(mt_rand().$name), 0, 25);
   try {
+    mkdir(GALLERY_PATH . DS . $directory . DS . $download_directory, 0755, true);
     $stmt = $db->prepare('INSERT INTO gallery_category(name, description, directory, download_directory, visible) VALUES(?, ?, ?, ?, ?) RETURNING id');
-    $stmt->execute(array($name, $description, $directory, substr(sha1(mt_rand().$name), 0, 25), $visible));
+    $stmt->execute(array($name, $description, $directory, $download_directory, $visible));
     $result = $stmt->fetch();
     return $result['id'];
   } catch(Exception $e) {
@@ -173,9 +192,10 @@ function delete_gallery_category($id) {
 function add_gallery_image($image, $category_id) {
   global $db;
   try {
-    $stmt = $db->prepare('INSERT INTO gallery_image(file, category) VALUES(?, ?)');
+    $stmt = $db->prepare('INSERT INTO gallery_image(file, category) VALUES(?, ?) RETURNING id');
     $stmt->execute(array($image, $category_id));
-    return true;
+    $result = $stmt->fetch();
+    return $result['id'];
   } catch(Exception $e) {
     return false;
   }
@@ -256,4 +276,78 @@ function delete_gallery_images($images, $category_id) {
     return false;
   }
   die;
+}
+
+
+/* BLOG FUNCTIONS
+ *************************************************
+ * get_blog_posts
+ * get_blog_post_by_id
+ * update_blog_post
+ * create_blog_post
+ * add_blog_post_attachments
+ */
+
+function get_blog_posts($values) {
+  global $db;
+  $sql = 'SELECT ';
+  foreach($values as $value) {
+    $sql .= $value.', ';
+  }
+  $sql = substr($sql, 0, -2) . ' FROM blog_post ORDER BY edited DESC';
+  try {
+    $stmt = $db->prepare($sql);
+    $stmt->execute();
+    return $stmt->fetchAll();
+  } catch(Exception $e) {
+    return false;
+  }
+}
+
+function get_blog_post_by_id($post_id) {
+  global $db;
+  try {
+    $stmt = $db->prepare('SELECT id, caption, text, created, edited FROM blog_post WHERE id = ?');
+    $stmt->execute(array($post_id));
+    return $stmt->fetch();
+  } catch(Exception $e) {
+    return false;
+  }
+}
+
+function update_blog_post($post_id, $data) {
+  global $db;
+  try {
+    $stmt = $db->prepare('UPDATE blog_post SET caption = ?, text = ?, edited = NOW() WHERE id = ?');
+    $stmt->execute(array($data['caption'], $data['text'], $post_id));
+    return get_blog_post_by_id($post_id);
+  } catch(Exception $e) {
+    return false;
+  }
+}
+
+function create_blog_post($data) {
+  global $db;
+  try {
+    $stmt = $db->prepare('INSERT INTO blog_post(caption, text, edited) VALUES(?, ?, NOW()) RETURNING id');
+    $stmt->execute(array($data['caption'], $data['text']));
+    $result = $stmt->fetch();
+    return $result['id'];
+  } catch(Exception $e) {
+    return false;
+  }
+}
+
+function add_blog_post_attachments($post_id, $images) {
+  global $db;
+  foreach($images as $image) {
+    try {
+      $stmt = $db->prepare('INSERT INTO blog_post_attachment(post, image) VALUES(?, ?)');
+      $stmt->execute(array($post_id, $image));
+    } catch(Exception $e) {
+      return false;
+    }
+  }
+  
+  return true;
 }

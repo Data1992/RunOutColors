@@ -17,7 +17,7 @@ if(isset($_POST['back'])) {
   $new_category =  trim($_POST['create-category']);
   if($new_category != '')
     $selected_category = add_gallery_category($_POST['new-category'], $_POST['description'], 
-      isset($_POST['visible']) && ($_POST['visible'] == true));
+      (isset($_POST['visible']) && ($_POST['visible'] == true) ? 'TRUE' : 'FALSE'));
 } elseif(isset($_POST['edit-category'])) {
   edit_gallery_category(intval($selected_category), array(
     'name' => $_POST['category-name'],
@@ -125,7 +125,7 @@ if(isset($_POST['back'])) {
       </form>
     </div>
 <?php if($selected_category != null): ?>
-<?php $category = get_gallery_category_by_id($selected_category); ?>
+<?php $category = get_gallery_category_by('id', $selected_category); ?>
     <div id="edit-category-form">
       <form method="post" class="inrow">
         <input type="hidden" name="category" value="<?php echo $category['id']; ?>" />

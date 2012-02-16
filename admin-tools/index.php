@@ -44,6 +44,7 @@ if(!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
         <li><a href="gallery-admin.php">Gallery Administration</a></li>
         <li><a href="gallery-upload.php">Gallery Upload Tool</a></li>
         <li><a href="static-editor.php">Static Pages Editor</a></li>
+        <li><a href="blog-admin.php">Blog Administration</a></li>
       </ul>
     </div>
   </body>

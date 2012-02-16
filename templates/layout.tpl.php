@@ -88,7 +88,8 @@
     </div>
     <div id="footer">
       <div id="copyright">
-        &copy;<?php echo date('Y', time()); ?> RunOutColors
+        &copy;<?php echo date('Y', time()); ?> RunOutColors |
+        <a target="_blank" href="/admin-tools/login.php">Admin Tools</a>
       </div>
 <?php echo $debug; ?>
     </div>

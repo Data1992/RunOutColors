@@ -35,6 +35,16 @@ return array(
       ),
     ),
   ),
+  'blog-view' => array(
+    'route' => '/blog/article/:id',
+    'options' => array(
+      'controller' => 'blog',
+      'action' => 'view',
+      'parameters' => array(
+        'id' => 'numeric',
+      ),
+    ),
+  ),
   'gallery-index' => array(
     'route' => '/gallery',
     'options' => array(

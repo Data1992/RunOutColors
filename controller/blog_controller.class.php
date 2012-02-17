@@ -30,5 +30,22 @@ class BlogController extends Controller {
       $this->_tpl->assign('posts', $posts);
     } else throw new ErrorException('Page does not exist.');
   }
+  
+  public function view() {
+    if(!isset($this->_params['id']))
+      throw new ErrorException('Page does not exist.');
+  
+    $stmt = $this->_db->prepare('SELECT id, caption, text, created, edited FROM blog_post WHERE id = ?');
+    $stmt->execute(array($this->_params['id']));
+    $post = $stmt->fetch();
+    
+    $stmt = $this->_db->prepare('SELECT a.id, a.image, i.file, i.downloadable FROM blog_post_attachment a INNER JOIN
+      gallery_image i ON a.image = i.id WHERE a.post = ?');
+    $stmt->execute(array($post['id']));
+    $attachments = $stmt->fetchAll();
+    
+    $this->_tpl->assign('post', $post);
+    $this->_tpl->assign('attachments', $attachments);
+  }
 
 }

@@ -1,3 +1,4 @@
+<h2>Blog</h2>
 <table id="pagination">
 <tr>
   <td align="left" width="40%">
@@ -13,15 +14,17 @@
   </td>
 </tr>
 </table>
+
 <?php foreach($posts as $post): ?>
 <div class="entry">
-  <h2><?php echo $post['caption']; ?></h2>
+  <h3><a href="/blog/article/<?php echo $post['id']; ?>"><?php echo $post['caption']; ?></a></h2>
   <div class="content">
     <?php echo $post['text']; ?>
   </div>
   <span><i><?php echo date('d.m.Y H:i', strtotime($post['edited'])); ?></i></span>
 </div>
 <?php endforeach; ?>
+
 <table id="pagination">
 <tr>
   <td align="left" width="40%">

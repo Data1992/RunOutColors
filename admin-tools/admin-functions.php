@@ -51,7 +51,7 @@ function get_gallery_category_thumb_path($category_id, $thumb_type) {
 }
 
 function create_gallery_thumbnails($category_id, $width, $height, $folder, $force = false) {  
-  $category = get_gallery_category_by_id('id', $category_id);
+  $category = get_gallery_category_by('id', $category_id);
   if($category === false)
     return;
   $dir = GALLERY_PATH . DS . $category['directory'];

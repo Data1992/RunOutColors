@@ -9,7 +9,8 @@ class BlogController extends Controller {
   protected $_defaultAction = 'index';
 
   public function index() {
-    $sql = 'SELECT id, caption, text, edited FROM blog_post ORDER BY edited DESC';
+    $sql = 'SELECT p.id, p.caption, p.text, p.edited, i.id AS image_id, i.file AS image_file FROM blog_post p
+      LEFT JOIN gallery_image i ON i.id = p.front_image ORDER BY edited DESC';
     if(!isset($this->_params['page']))
       $this->_params['page'] = 1;
     $posts_per_page = 5;

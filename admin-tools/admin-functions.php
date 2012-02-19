@@ -318,8 +318,8 @@ function get_blog_post_by_id($post_id) {
 function update_blog_post($post_id, $data) {
   global $db;
   try {
-    $stmt = $db->prepare('UPDATE blog_post SET caption = ?, text = ?, edited = NOW() WHERE id = ?');
-    $stmt->execute(array($data['caption'], $data['text'], $post_id));
+    $stmt = $db->prepare('UPDATE blog_post SET caption = ?, text = ?, front_image = ?, edited = NOW() WHERE id = ?');
+    $stmt->execute(array($data['caption'], $data['text'], $data['front_image'], $post_id));
     return get_blog_post_by_id($post_id);
   } catch(Exception $e) {
     return false;
@@ -333,6 +333,36 @@ function create_blog_post($data) {
     $stmt->execute(array($data['caption'], $data['text']));
     $result = $stmt->fetch();
     return $result['id'];
+  } catch(Exception $e) {
+    return false;
+  }
+}
+
+function delete_blog_post($post_id) {
+  global $db;
+  try {
+    $images = array();
+    $category = get_gallery_category_by('directory', 'snapshots');
+    
+    $stmt = $db->prepare('DELETE FROM blog_post_attachment WHERE post = ? RETURNING image');
+    $stmt->execute(array($post_id));
+    while(false !== ($row = $stmt->fetch()))
+      $images[] = $row['image'];
+    delete_gallery_images($images, $category['id']);
+    $stmt = $db->prepare('DELETE FROM blog_post WHERE id = ?');
+    $stmt->execute(array($post_id));
+  } catch(Exception $e) {
+    return false;
+  }
+}
+
+function get_blog_post_attachments($post_id) {
+  global $db;
+  try {
+    $stmt = $db->prepare('SELECT i.id, i.file, c.directory FROM blog_post_attachment a, gallery_image i,
+      gallery_category c WHERE a.post = ? AND a.image = i.id AND c.id = i.category');
+    $stmt->execute(array($post_id));
+    return $stmt->fetchAll();
   } catch(Exception $e) {
     return false;
   }

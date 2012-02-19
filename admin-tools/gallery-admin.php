@@ -64,6 +64,8 @@ if(isset($_POST['back'])) {
       body { background: #111; color: #FFF; font-family: Arial, sans-serif; }
       h2 { color: #2B2; margin: 20px; }
       h3 { color: #2B2; margin-bottom: 5px; }
+      a, a:link { color: #FFF; text-decoration: underline; }
+      a:hover { color: #2B2; }
       div { margin-left: 50px; margin-bottom: 10px; padding: 10px; border: 1px solid #FFF; }
       
       form { margin-left: 15px; }
@@ -75,14 +77,12 @@ if(isset($_POST['back'])) {
       input[type=text] { width: 242px; border: 2px solid #FFF; background: #111; color: #FFF; padding: 2px; }
       textarea { width: 353px; height: 70px; border: 2px solid #FFF; color: #FFF; background: #111; margin: 0px 0px 0px 2px; }
       
-<?php if($selected_category != null): ?>
-      #choose-category-form { opacity: 0.4; }
-      #choose-category-form:hover { opacity: 1 }
       input[name=delete-category] { background: #F00; font-weight: bold; }
-<?php endif; ?>
+      #upload-tool { width: 40%; }
       #choose-category-form, #edit-category-form { width: 40%; float: left; }
       #choose-category-form:after { clear: both; }
-      #manage-images { width: 40%; float: left; margin-top: -180px; height: 400px; overflow: auto;}
+      #edit-category-form { position: relative; bottom: 52px; right: 40px; }
+      #manage-images { width: 40%; float: left; margin-top: -185px; height: 400px; overflow: auto; }
       #manage-images td { padding: 5px; }
       #manage-images td img { border: 1px solid #FFF; }
       
@@ -100,6 +100,16 @@ if(isset($_POST['back'])) {
     <h2>RunOutColors :: Gallery Administration</h2>
     <div id="links">
       <a href="index.php">Index</a> 
+    </div>
+    <div id="upload-tool">
+      <script type="text/javascript">
+        function popup(url, title) {
+          var fenster = window.open(url, title, "width=1000, height=600, resizable=yes");
+          fenster.focus();
+          return false;
+        }
+      </script>
+      <a href="gallery-upload.php?destroy=1" target="_blank" onClick="return popup(this.href, 'Upload Tool');">Upload Tool</a>
     </div>
     <div id="choose-category-form">
       <p><i>Kategorie ausw&auml;hlen:</i></p>

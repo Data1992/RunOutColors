@@ -11,8 +11,9 @@ if(!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
 require 'admin-functions.php';
 define('MAX_FILE_SIZE', 1024*1024*10);
 
-if(isset($_GET['destroy']) && intval($_GET['destroy']) == 1)
-  session_destroy();
+if(isset($_GET['destroy']) && intval($_GET['destroy']) == 1) {
+  unset($_SESSION['step']);
+}
 
 if(!isset($_SESSION['step']) || $_SESSION['step'] < 1 || $_SESSION['step'] > 2)
   $_SESSION['step'] = 1;
@@ -109,27 +110,21 @@ if($_SESSION['step'] == 1 && isset($_FILES['image'])) {
       h3 { color: #2B2; margin-bottom: 5px; }
       div { margin-left: 50px; margin-bottom: 10px; padding: 10px; }
       
-      #upload-form, #category-form { border: 1px solid #FFF; width: 70%; }
-      #error { border: 1px solid #F00; background: #F88; width: 70%; }
+      #upload-form, #category-form { border: 1px solid #FFF; width: 80%; }
+      #error { border: 1px solid #F00; background: #F88; width: 80%; }
       input[type=file], input[type=submit]  { display: block; margin-top: 5px; }
       input[type=submit] {
         border: 1px solid #FFF; color: #FFF; background: #111; padding: 5px 10px; }
         
       #category-form { float: left; }
       #category-form img { float: left; padding: 5px; }
-      
-      #links { position: fixed; top: 0; right: -3px; background: #FFF; border: 3px solid #2B2; }
-      #links a { color: black; }
     </style>
   </head>
   <body>
     <h2>RunOutColors :: Gallery Upload Tool</h2>
-    <div id="links">
-      <a href="index.php">Index</a> 
-    </div>
 <?php if($_SESSION['step'] == 1): ?>
     <div id="upload-form">
-      <form enctype="multipart/form-data" method="post">
+      <form enctype="multipart/form-data" method="post" action="gallery-upload.php">
         <input type="hidden" name="MAX_FILE_SIZE" value="<?php echo MAX_FILE_SIZE; ?>" />
         Bild: <input type="file" name="image" /><br />
         <input type="submit" value="Senden" />

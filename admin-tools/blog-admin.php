@@ -11,14 +11,18 @@ if(!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
 require_once 'admin-functions.php';
 $invalid = false;
 
-if(isset($_GET['edit']) && !isset($_GET['id'])) {
+if((isset($_GET['edit']) || isset($_GET['delete'])) && !isset($_GET['id'])) {
   $invalid = true;
 } else {
-  $action = (isset($_GET['edit'])) ? 'edit' : 'create';
+  $action = (isset($_GET['edit'])) ? 'edit' : (isset($_GET['delete']) ? 'delete' : 'create');
   if($action == 'edit') {
     $id = intval($_GET['id']);
     if(false === ($post = get_blog_post_by_id($id)))
       $invalid = true;
+  } else if($action == 'delete') {
+    $id = intval($_GET['id']);
+    delete_blog_post($id);
+    $invalid = true;  // make invalid so refreshing is done
   }
 }
   
@@ -31,6 +35,7 @@ if(isset($_POST['send-post'])) {
     $post = update_blog_post($_POST['id'], array(
       'caption' => $_POST['caption'],
       'text' => $_POST['text'],
+      'front_image' => isset($_POST['front-image']) ? $_POST['front-image'] : 'NULL',
     ));
     $id = $post['id'];
   } elseif($action == 'create') {
@@ -80,6 +85,12 @@ if(isset($_POST['send-post'])) {
     <script type="text/javascript" src="../js/ckeditor/ckeditor.js"></script>
     <script type="text/javascript" src="../js/ckeditor/adapters/jquery.js"></script>
     <script type="text/javascript" src="fileupload/fileuploader.js"></script>
+    <script type="text/javascript">
+      function confirmSubmit(message) {
+        var agree = confirm(message);
+        return agree == true;
+      }
+    </script>
   </head>
   <body>
     <h2>RunOutColors :: Blog Administration</h2>
@@ -93,6 +104,9 @@ if(isset($_POST['send-post'])) {
 <?php foreach($posts as $post_info): ?>
         <li><a href="blog-admin.php?edit&id=<?php echo $post_info['id']; ?>">
           <?php echo $post_info['caption']; ?> (<?php echo date('d. M, H:i', strtotime($post_info['edited'])); ?>)
+          <a href="blog-admin.php?delete&id=<?php echo $post_info['id']; ?>" title="L&ouml;schen" onClick="return confirmSubmit('Wirklich diesen Eintrag l&ouml;schen?');">
+            <img src="page_white_delete.png" width="14" />
+          </a>
         </a></li>
 <?php endforeach; ?>
       </ul>
@@ -108,6 +122,17 @@ if(isset($_POST['send-post'])) {
         <i>Titel:</i><br /><input type="text" name="caption" <?php echo (isset($post) ? 'value="'.$post['caption'].'"' : ''); ?> /><br />
         <i>Inhalt:</i><br />
         <textarea name="text" id="editor"><?php echo (isset($post) ? $post['text'] : ''); ?></textarea>
+<?php if(isset($post)): ?>
+<?php $attachments = get_blog_post_attachments($post['id']); ?>
+<?php if($attachments !== false && !empty($attachments)): ?>
+        <i>Vorschaubild:</i><br />
+        <select name="front-image">
+<?php foreach($attachments as $attachment): ?>
+          <option value="<?php echo $attachment['id']; ?>"><?php echo $attachment['file']; ?></option>
+<?php endforeach; ?>
+        </select><br />
+<?php endif; ?>
+<?php endif; ?>
         <i>Anhänge:</i><br />
         <div id="file-upload">
           <noscript><p>Please enable Javascript to use file uploader.</p></noscript>

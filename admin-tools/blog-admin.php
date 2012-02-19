@@ -35,7 +35,7 @@ if(isset($_POST['send-post'])) {
     $post = update_blog_post($_POST['id'], array(
       'caption' => $_POST['caption'],
       'text' => $_POST['text'],
-      'front_image' => isset($_POST['front-image']) ? $_POST['front-image'] : 'NULL',
+      'front_image' => (isset($_POST['front-image']) && intval($_POST['front-image']) > 0) ? intval($_POST['front-image']) : null,
     ));
     $id = $post['id'];
   } elseif($action == 'create') {
@@ -127,8 +127,10 @@ if(isset($_POST['send-post'])) {
 <?php if($attachments !== false && !empty($attachments)): ?>
         <i>Vorschaubild:</i><br />
         <select name="front-image">
+          <option value="0">-- Kein Bild</option>
 <?php foreach($attachments as $attachment): ?>
-          <option value="<?php echo $attachment['id']; ?>"><?php echo $attachment['file']; ?></option>
+<?php $selected = ($attachment['id'] == $post['front_image']) ? ' selected="selected"' : ''; ?>
+          <option value="<?php echo $attachment['id']; ?>"<?php echo $selected; ?>><?php echo $attachment['file']; ?></option>
 <?php endforeach; ?>
         </select><br />
 <?php endif; ?>

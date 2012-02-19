@@ -26,8 +26,7 @@ function rrmdir($dir) {
  * get_gallery_thumb_types
  * get_gallery_category_thumb_path
  * create_gallery_thumbnails 
- * get_gallery_category_by_id
- * get_gallery_category_by_folder
+ * get_gallery_category_by
  * get_gallery_categories 
  * add_gallery_category 
  * edit_gallery_category
@@ -285,6 +284,8 @@ function delete_gallery_images($images, $category_id) {
  * get_blog_post_by_id
  * update_blog_post
  * create_blog_post
+ * delete_blog_post
+ * get_blog_post_attachments
  * add_blog_post_attachments
  */
 
@@ -307,7 +308,7 @@ function get_blog_posts($values) {
 function get_blog_post_by_id($post_id) {
   global $db;
   try {
-    $stmt = $db->prepare('SELECT id, caption, text, created, edited FROM blog_post WHERE id = ?');
+    $stmt = $db->prepare('SELECT id, caption, text, created, edited, front_image FROM blog_post WHERE id = ?');
     $stmt->execute(array($post_id));
     return $stmt->fetch();
   } catch(Exception $e) {

@@ -1,4 +1,5 @@
 temp/*_cache
 config/default.php
+admin-tools/config.php
 images/gallery/**/*
 tests/**/*

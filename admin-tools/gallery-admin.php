@@ -33,19 +33,7 @@ if(isset($_POST['back'])) {
   $width = 0;
   $height = 0;
   $directory = '';
-  switch($_POST['size']) {
-    case 'smallest':
-      $width = $height = 50;
-      break;
-    case 'small':
-      $width = 200; $height = 150;
-      break;
-    default:
-    case 'big':
-      $width = 800; $height = 600;
-      break;
-  }
-  create_gallery_thumbnails($selected_category, $width, $height, $_POST['size'], isset($_POST['force']));
+  create_gallery_thumbnails($selected_category, $_POST['size'], isset($_POST['force']));
 } elseif(isset($_POST['confirm-manage-images'])) {
   if(isset($_POST['delete-image']))
     delete_gallery_images(array_values($_POST['delete-image']), $selected_category);

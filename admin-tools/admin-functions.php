@@ -49,7 +49,20 @@ function get_gallery_category_thumb_path($category_id, $thumb_type) {
   return GALLERY_WEB_PATH . DS . $category['directory'] . DS . $thumb_type;
 }
 
-function create_gallery_thumbnails($category_id, $width, $height, $folder, $force = false) {  
+function create_gallery_thumbnails($category_id, $folder, $force = false) {
+  switch($folder) {
+    case 'smallest':
+      $width = $height = 50;
+      break;
+    case 'small':
+      $width = 200; $height = 150;
+      break;
+    default:
+    case 'big':
+      $width = 800; $height = 600;
+      break;
+  }
+  
   $category = get_gallery_category_by('id', $category_id);
   if($category === false)
     return;
@@ -194,6 +207,11 @@ function add_gallery_image($image, $category_id) {
     $stmt = $db->prepare('INSERT INTO gallery_image(file, category) VALUES(?, ?) RETURNING id');
     $stmt->execute(array($image, $category_id));
     $result = $stmt->fetch();
+    
+    create_gallery_thumbnails($category_id, 'smallest');
+    create_gallery_thumbnails($category_id, 'small');
+    create_gallery_thumbnails($category_id, 'big');
+    
     return $result['id'];
   } catch(Exception $e) {
     return false;

@@ -11,7 +11,9 @@ if(basename($gallery['front_image']) == $gallery['front_image']) {
                    !file_exists(GALLERY_PATH.'/'.$gallery['directory'].'/small/'.$gallery['front_image'])
                    ? 'images/camera.gif' 
                    : 'images/gallery/'.$gallery['directory'].'/small/'.$gallery['front_image']);
-} else $gallery_thumb = $gallery['front_image'];
+} else $gallery_thumb = !file_exists(GALLERY_PATH.'/'.$gallery['front_image']) 
+                        ? 'images/camera.gif'
+                        : 'images/gallery/'.$gallery['front_image'];
 ?>            
   <a href="./gallery/<?php echo $gallery['directory']; ?>">
     <div class="title"><?php echo $gallery['name']; ?></div>

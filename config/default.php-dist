@@ -27,4 +27,7 @@ return array(
     'public_key' => '',
     'private_key' => '',
   ),
+  'contact' => array(
+    'email' => '',
+  ),
 );

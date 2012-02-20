@@ -40,7 +40,19 @@ class StaticController extends Controller {
        
         if($response != null && $response->is_valid) {
           // Send mail
-          // mail(...)
+          $header = 'From: RunOutColors <noreply@runoutcolors.com>'."\r\n";
+          $message = <<<EOF
+RunOutColors Kontakt-Formular
+=============================
+Name: {$data['from-name']}
+Email-Adresse: {$data['from-email']}
+  
+Nachricht:
+{$data['message']}
+  
+Hinweis: Dies ist eine automatisch generierte Nachricht.
+EOF;
+          mail($config['contact']['email'], 'RunOutColors Contact Form', $message, $header);
           $this->_tpl->assign('done', true);
         } else {
           $this->_tpl->assign('error', 'Falscher Sicherheitscode. Bitte erneut versuchen!');

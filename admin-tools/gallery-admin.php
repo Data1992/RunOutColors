@@ -19,12 +19,21 @@ if(isset($_POST['back'])) {
     $selected_category = add_gallery_category($_POST['new-category'], $_POST['description'], 
       (isset($_POST['visible']) && ($_POST['visible'] == true) ? 'TRUE' : 'FALSE'));
 } elseif(isset($_POST['edit-category'])) {
+  if(isset($_FILES['external-preview']) && 
+      move_uploaded_file($_FILES['external-preview']['tmp_name'], 
+      GALLERY_PATH . DS . '.previews' . DS . $_FILES['external-preview']['name']))
+  {
+    $front_image = '/images/gallery/.previews' . DS . $_FILES['external-preview']['name'];
+  } else if(isset($_POST['category-preview'])) {
+    $front_image = $_POST['category-preview'];
+  }
+
   edit_gallery_category(intval($selected_category), array(
     'name' => $_POST['category-name'],
     'visible' => (isset($_POST['category-visible']) && !empty($_POST['category-visible']) ? '1' : '0'),
     'description' => htmlentities($_POST['category-description']),
     'directory' => $_POST['category-directory'],
-    'front_image' => $_POST['category-preview'],
+    'front_image' => $front_image,
   ));
 } elseif(isset($_POST['delete-category'])) {
   delete_gallery_category($selected_category);
@@ -133,18 +142,21 @@ if(isset($_POST['back'])) {
         <input type="submit" name="delete-category" value="L&Ouml;SCHEN" onclick="return confirmSubmit('Wirklich l&ouml;schen?');" />
       </form>
       <p style="margin-top: 5px;"><i>Kategorie bearbeiten:</i></p>
-      <form method="post">
+      <form method="post" enctype="multipart/form-data">
         <span>Name:</span><br />
         <input type="text" name="category-name" value="<?php echo $category['name']; ?>" />
         <input type="checkbox" name="category-visible"<?php echo ($category['visible'] == true) ? ' checked="checked"' : ''; ?> />
         <span>Sichtbar?</span><br />
         <span>Vorschaubild:</span><br />
         <select name="category-preview">
+<?php if(basename($category['front_image']) != $category['front_image']): ?>
+          <option value="0" selected="selected">-- Externes Vorschaubild</option>
+<?php endif; ?> 
 <?php $images = get_gallery_images($selected_category); ?>
 <?php foreach($images as $image): ?>
           <option value="<?php echo $image['file']; ?>" <?php echo ($image['file'] == $category['front_image'] ? 'selected="selected"' : ''); ?>><?php echo $image['file']; ?></option>
 <?php endforeach; ?>
-        </select><br />
+        </select> oder <input type="file" name="external-preview" /><br />
         <span>Verzeichnis:</span><br />
         <input type="text" name="category-directory" value="<?php echo $category['directory']; ?>" /><br />
         <span>Beschreibung:</span><br />

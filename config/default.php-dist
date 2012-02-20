@@ -23,4 +23,8 @@ return array(
   'facebook' => array(
     'app_id' => '',
   ),
+  'recaptcha' => array(
+    'public_key' => '',
+    'private_key' => '',
+  ),
 );

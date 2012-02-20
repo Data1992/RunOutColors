@@ -84,6 +84,13 @@ return array(
       ),
     ),
   ),
+  'contact' => array(
+    'route' => '/contact',
+    'options' => array(
+      'controller' => 'static',
+      'action' => 'contact',
+    ),
+  ),
   'imprint' => array(
     'route' => '/imprint',
     'options' => array(

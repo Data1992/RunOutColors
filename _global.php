@@ -20,6 +20,7 @@ require LIBRARY_DIR . DS . 'database.class.php';
 require LIBRARY_DIR . DS . 'request.class.php';
 require LIBRARY_DIR . DS . 'routing.class.php';
 require LIBRARY_DIR . DS . 'twitter.class.php';
+require LIBRARY_DIR . DS . 'recaptchalib.php';
 
 // Localize datetime output
 setlocale(LC_ALL, (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') ? 'german' : 'de_DE.UTF-8');
